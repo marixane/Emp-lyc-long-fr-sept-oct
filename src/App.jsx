@@ -14,6 +14,7 @@ const POINT_STEP = 0.25;
 const MIN_POINTS = 1;
 const MAX_POINTS = 20;
 const TOTAL_EXERCISE_HEIGHT = 986;
+const MIN_EXERCISE_HEIGHT = 120;
 
 const clamp = (value, min, max) => Math.min(Math.max(Number(value), min), max);
 
@@ -48,6 +49,7 @@ function App() {
   const [testTitle, setTestTitle] = useState('Devoir individuel de Mathématique');
   const [teacher, setTeacher] = useState('Prof : Marwane.R');
   const [exercises, setExercises] = useState(DEFAULT_EXERCISES);
+  const [exerciseHeights, setExerciseHeights] = useState([430, 278, 278]);
   const [isExporting, setIsExporting] = useState(false);
   const [dragState, setDragState] = useState(null);
   const [resizeState, setResizeState] = useState(null);
@@ -127,9 +129,58 @@ function App() {
     );
   };
 
-  const updateSize = (id, value, index) => {
-    const max = index === 0 ? 220 : 120;
-    updateExercise(id, 'size', clamp(value, 0, max));
+  const applyHeightDelta = (upperIndex, lowerIndex, deltaY, startHeights) => {
+    const maxDelta = startHeights[lowerIndex] - MIN_EXERCISE_HEIGHT;
+    const minDelta = MIN_EXERCISE_HEIGHT - startHeights[upperIndex];
+    const safeDelta = clamp(deltaY, minDelta, maxDelta);
+
+    return startHeights.map((height, index) => {
+      if (index === upperIndex) return Math.round(height + safeDelta);
+      if (index === lowerIndex) return Math.round(height - safeDelta);
+      return height;
+    });
+  };
+
+  const updateHeightByPercent = (index, value) => {
+    const targetHeight = Math.round((clamp(value, 12, 76) / 100) * TOTAL_EXERCISE_HEIGHT);
+    const compensationIndex = getCompensationIndex(index);
+    const delta = targetHeight - exerciseHeights[index];
+    const upperIndex = index < compensationIndex ? index : compensationIndex;
+    const lowerIndex = index < compensationIndex ? compensationIndex : index;
+    const signedDelta = index === upperIndex ? delta : -delta;
+
+    setExerciseHeights(applyHeightDelta(upperIndex, lowerIndex, signedDelta, exerciseHeights));
+  };
+
+  const startResize = (event, lowerExerciseIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragState(null);
+
+    setResizeState({
+      upperIndex: lowerExerciseIndex - 1,
+      lowerIndex: lowerExerciseIndex,
+      startClientY: event.clientY,
+      startHeights: exerciseHeights,
+    });
+  };
+
+  const moveResize = (event) => {
+    if (!resizeState) return;
+
+    const deltaY = event.clientY - resizeState.startClientY;
+    setExerciseHeights(
+      applyHeightDelta(
+        resizeState.upperIndex,
+        resizeState.lowerIndex,
+        deltaY,
+        resizeState.startHeights
+      )
+    );
+  };
+
+  const endResize = () => {
+    setResizeState(null);
   };
 
   const updatePhotoControl = (id, field, value) => {
@@ -144,6 +195,7 @@ function App() {
 
   const startDrag = (event, exercise) => {
     event.preventDefault();
+    setResizeState(null);
 
     setDragState({
       id: exercise.id,
@@ -154,7 +206,7 @@ function App() {
     });
   };
 
-  const movePhotoDrag = (event) => {
+  const moveDrag = (event) => {
     if (!dragState) return;
 
     const deltaX = event.clientX - dragState.startClientX;
@@ -163,69 +215,8 @@ function App() {
     updateImagePosition(dragState.id, dragState.startX + deltaX, dragState.startY + deltaY);
   };
 
-  const getExerciseHeights = () => {
-    const minSmallHeight = 150;
-    const firstHeight = 350 + exercises[0].size;
-    const remaining = TOTAL_EXERCISE_HEIGHT - firstHeight;
-    const balance = exercises[1].size - exercises[2].size;
-    const secondHeight = clamp(Math.round(remaining / 2 + balance), minSmallHeight, remaining - minSmallHeight);
-    const thirdHeight = remaining - secondHeight;
-
-    return [firstHeight, secondHeight, thirdHeight];
-  };
-
-  const exerciseHeights = getExerciseHeights();
-  const getHeightPercentage = (height) => Math.round((height / TOTAL_EXERCISE_HEIGHT) * 100);
-
-  const startResize = (event, dividerIndex) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    setResizeState({
-      dividerIndex,
-      startClientY: event.clientY,
-      startSizes: exercises.map((exercise) => exercise.size),
-      startHeights: exerciseHeights,
-    });
-  };
-
-  const moveResize = (event) => {
-    if (!resizeState) return;
-
-    const deltaY = event.clientY - resizeState.startClientY;
-
-    setExercises((items) =>
-      items.map((item, index) => {
-        if (resizeState.dividerIndex === 0 && index === 0) {
-          const nextFirstHeight = clamp(resizeState.startHeights[0] + deltaY, 350, 570);
-          return { ...item, size: Math.round(nextFirstHeight - 350) };
-        }
-
-        if (resizeState.dividerIndex === 1 && index === 1) {
-          const firstHeight = resizeState.startHeights[0];
-          const remaining = TOTAL_EXERCISE_HEIGHT - firstHeight;
-          const nextSecondHeight = clamp(resizeState.startHeights[1] + deltaY, 150, remaining - 150);
-          const wantedBalance = nextSecondHeight - remaining / 2;
-          return { ...item, size: clamp(Math.round(wantedBalance + resizeState.startSizes[2]), 0, 120) };
-        }
-
-        return item;
-      })
-    );
-  };
-
-  const handlePointerMove = (event) => {
-    if (resizeState) {
-      moveResize(event);
-      return;
-    }
-
-    movePhotoDrag(event);
-  };
-
   const endDrag = () => {
     setDragState(null);
-    setResizeState(null);
   };
 
   const resetPhotoPosition = (id) => {
@@ -233,6 +224,8 @@ function App() {
       items.map((item) => (item.id === id ? { ...item, zoom: 100, x: 0, y: 0 } : item))
     );
   };
+
+  const getHeightPercentage = (height) => Math.round((height / TOTAL_EXERCISE_HEIGHT) * 100);
 
   const handleExerciseImage = (id, file) => {
     if (!file || !file.type.startsWith('image/')) return;
@@ -281,12 +274,26 @@ function App() {
   };
 
   return (
-    <main className="app-shell" onMouseMove={handlePointerMove} onMouseUp={endDrag} onMouseLeave={endDrag}>
+    <main
+      className={`app-shell ${resizeState ? 'is-resizing' : ''}`}
+      onMouseMove={(event) => {
+        moveDrag(event);
+        moveResize(event);
+      }}
+      onMouseUp={() => {
+        endDrag();
+        endResize();
+      }}
+      onMouseLeave={() => {
+        endDrag();
+        endResize();
+      }}
+    >
       <section className="panel">
         <p className="eyebrow">A4 Exam Maker</p>
         <h1>Créer une feuille A4 avec entête fixe</h1>
         <p className="intro">
-          Tu peux modifier la hauteur directement dans la page avec les lignes entre les exercices.
+          Dans l’aperçu, tire la ligne entre les exercices pour modifier directement la hauteur.
         </p>
 
         <div className="form-group">
@@ -372,10 +379,10 @@ function App() {
               <label>Hauteur</label>
               <input
                 type="range"
-                min="0"
-                max={index === 0 ? '220' : '120'}
-                value={exercise.size}
-                onChange={(e) => updateSize(exercise.id, e.target.value, index)}
+                min="12"
+                max="76"
+                value={getHeightPercentage(exerciseHeights[index])}
+                onChange={(e) => updateHeightByPercent(index, e.target.value)}
               />
               <small>Hauteur actuelle : {getHeightPercentage(exerciseHeights[index])} %</small>
             </div>
@@ -465,6 +472,14 @@ function App() {
                 key={exercise.id}
                 style={{ height: `${exerciseHeights[index]}px` }}
               >
+                {index > 0 && (
+                  <button
+                    type="button"
+                    className="resize-handle"
+                    onMouseDown={(event) => startResize(event, index)}
+                    aria-label={`Modifier la hauteur de ${exercise.title}`}
+                  />
+                )}
                 <div className="exercise-title">
                   {exercise.title} : * ( {formatPoints(exercise.points)} ) *
                 </div>
@@ -484,19 +499,6 @@ function App() {
                     <div className="empty-zone">Photo de {exercise.title}</div>
                   )}
                 </div>
-
-                {!isExporting && index < 2 && (
-                  <button
-                    type="button"
-                    className="height-drag-line"
-                    onMouseDown={(event) => startResize(event, index)}
-                    aria-label={`Modifier la hauteur après ${exercise.title}`}
-                    title="Clique et glisse vers le haut ou le bas"
-                  >
-                    <span>↕</span>
-                  </button>
-                )}
-
                 {index === 1 && <span className="side-mark top">1P</span>}
                 {index === 1 && <span className="side-mark middle">1P</span>}
               </section>
