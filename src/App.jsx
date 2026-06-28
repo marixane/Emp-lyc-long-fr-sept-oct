@@ -380,16 +380,15 @@ function App() {
       <section className="preview-zone">
         <div className="a4-page exam-page" ref={pageRef}>
           <header className="exam-header three-cell-header">
-            <div className="header-cell left-header-cell editable-left-header">
-              <label>Classe :</label>
-              <input
-                className="inline-header-input"
+            <div className="header-cell left-header-cell class-duration-header">
+              <textarea
+                className="inline-class-input"
                 value={studentLevel}
                 onChange={(e) => setStudentLevel(e.target.value)}
+                rows="1"
                 aria-label="Classe"
               />
-              <label>Durée :</label>
-              <div className="inline-duration-control">
+              <div className="tiny-duration-control">
                 <button
                   type="button"
                   onClick={() => changeDuration(-1)}
