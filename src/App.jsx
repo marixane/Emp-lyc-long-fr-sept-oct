@@ -171,7 +171,7 @@ function App() {
         <p className="eyebrow">A4 Exam Maker</p>
         <h1>Créer une feuille A4 avec entête fixe</h1>
         <p className="intro">
-          Le titre Classe apparaît maintenant dans l'épreuve.
+          La classe et la durée sont placées à droite de l'épreuve.
         </p>
 
         <div className="form-group">
@@ -312,14 +312,16 @@ function App() {
               <div className="dotted-line" />
             </div>
 
-            <div className="level-box">
-              <span>Classe :</span>
-              <strong>{studentLevel}</strong>
-            </div>
-            <div className="duration-box">{duration}</div>
-
             <div className="title-box">
               <strong style={{ fontSize: `${getTitleFontSize(testTitle)}px` }}>{testTitle}</strong>
+            </div>
+
+            <div className="header-right">
+              <div className="level-box">
+                <span>Classe :</span>
+                <strong>{studentLevel}</strong>
+              </div>
+              <div className="duration-box">{duration}</div>
             </div>
           </header>
 
