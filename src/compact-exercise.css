@@ -133,10 +133,12 @@
   pointer-events: auto;
 }
 
+.exam-page.is-exporting button,
 .exam-page.is-exporting .photo-overlay-tools,
 .exam-page.is-exporting .mask-delete-button,
 .exam-page.is-exporting .mask-resize-handle,
 .exam-page.is-exporting .empty-zone,
+.html2canvas-container button,
 .html2canvas-container .photo-overlay-tools,
 .html2canvas-container .mask-delete-button,
 .html2canvas-container .mask-resize-handle,
