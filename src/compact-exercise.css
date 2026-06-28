@@ -19,6 +19,18 @@
   width: 22px;
   height: 22px;
   font-size: 14px;
+  background: linear-gradient(145deg, #5f7f99 0%, #274761 48%, #0f2438 100%);
+  color: #fff;
+  border: 1px solid #0b1f33;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.exercise-title-controls button:hover {
+  background: linear-gradient(145deg, #7f9bb2 0%, #365f7c 48%, #142f49 100%);
+}
+
+.exercise-title-controls button:active {
+  background: linear-gradient(145deg, #0f2438 0%, #274761 55%, #5f7f99 100%);
 }
 
 .exercise-title-controls strong {
@@ -40,6 +52,33 @@
   width: 18px;
   height: 18px;
   font-size: 12px;
+  background: linear-gradient(145deg, #5f7f99 0%, #274761 48%, #0f2438 100%);
+  color: #fff;
+  border: 1px solid #0b1f33;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.tiny-duration-control button:hover {
+  background: linear-gradient(145deg, #7f9bb2 0%, #365f7c 48%, #142f49 100%);
+}
+
+.tiny-duration-control button:active {
+  background: linear-gradient(145deg, #0f2438 0%, #274761 55%, #5f7f99 100%);
+}
+
+.compact-control button {
+  background: linear-gradient(145deg, #5f7f99 0%, #274761 48%, #0f2438 100%);
+  color: #fff;
+  border: 1px solid #0b1f33;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.compact-control button:hover {
+  background: linear-gradient(145deg, #7f9bb2 0%, #365f7c 48%, #142f49 100%);
+}
+
+.compact-control button:active {
+  background: linear-gradient(145deg, #0f2438 0%, #274761 55%, #5f7f99 100%);
 }
 
 .tiny-duration-control strong {
