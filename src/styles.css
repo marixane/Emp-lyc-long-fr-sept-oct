@@ -46,6 +46,7 @@ small {
 }
 
 input,
+select,
 textarea,
 button {
   width: 100%;
