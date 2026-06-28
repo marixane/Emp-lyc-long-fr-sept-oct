@@ -198,6 +198,15 @@ button {
   transform-origin: center center;
 }
 
+.draggable-photo {
+  cursor: grab;
+  user-select: none;
+}
+
+.draggable-photo:active {
+  cursor: grabbing;
+}
+
 .empty-zone {
   color: #999;
   font-weight: bold;
