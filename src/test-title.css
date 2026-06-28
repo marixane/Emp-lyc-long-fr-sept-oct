@@ -41,6 +41,8 @@ body,
 }
 
 .preview-zone .second-page .exercise-list {
+  height: auto;
+  align-content: start;
   gap: 0;
   transform: none;
 }
