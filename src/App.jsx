@@ -171,7 +171,7 @@ function App() {
         <p className="eyebrow">A4 Exam Maker</p>
         <h1>Créer une feuille A4 avec entête fixe</h1>
         <p className="intro">
-          La durée se règle avec les boutons - et +. Par défaut : 2 h.
+          Le titre Classe apparaît maintenant dans l'épreuve.
         </p>
 
         <div className="form-group">
@@ -312,7 +312,10 @@ function App() {
               <div className="dotted-line" />
             </div>
 
-            <div className="level-box">{studentLevel}</div>
+            <div className="level-box">
+              <span>Classe</span>
+              <strong>{studentLevel}</strong>
+            </div>
             <div className="duration-box">{duration}</div>
 
             <div className="title-box">
