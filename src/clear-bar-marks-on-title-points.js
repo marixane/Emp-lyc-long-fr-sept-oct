@@ -1,9 +1,14 @@
 function clearMarksInExercise(exercise) {
   if (!exercise) return;
-  var marks = Array.prototype.slice.call(exercise.querySelectorAll('.bar-mark'));
-  marks.forEach(function (mark) {
+
+  function removeOneBatch() {
+    var mark = exercise.querySelector('.bar-mark');
+    if (!mark) return;
     mark.dispatchEvent(new MouseEvent('dblclick', { bubbles: true, cancelable: true }));
-  });
+    setTimeout(removeOneBatch, 0);
+  }
+
+  removeOneBatch();
 }
 
 document.addEventListener('click', function (event) {
@@ -12,5 +17,5 @@ document.addEventListener('click', function (event) {
   var exercise = button.closest('.exam-exercise');
   setTimeout(function () {
     clearMarksInExercise(exercise);
-  }, 0);
+  }, 30);
 }, true);
