@@ -206,22 +206,31 @@
 .exam-page.has-bar-ribbon::before {
   content: '';
   position: absolute;
-  left: 48px;
-  top: 190px;
+  left: 31px;
+  top: 181px;
   bottom: 34px;
-  width: 2px;
-  background: rgba(120, 120, 120, 0.55);
-  z-index: 30;
+  width: 24px;
+  border-left: 2px solid rgba(120, 120, 120, 0.45);
+  border-right: 2px solid rgba(120, 120, 120, 0.45);
+  background: linear-gradient(to right, rgba(160, 160, 160, 0.04), rgba(160, 160, 160, 0.12), rgba(160, 160, 160, 0.04));
+  border-radius: 0 0 9px 9px;
+  z-index: 0;
   pointer-events: none;
 }
 
 .exam-page.second-page.has-bar-ribbon::before {
-  top: 34px;
+  top: 26px;
 }
 
-.exam-page.has-bar-ribbon .exercise-list {
+.exam-page.has-bar-ribbon .exam-header,
+.exam-page.has-bar-ribbon .exercise-list,
+.exam-page.has-bar-ribbon .page-number {
   position: relative;
   z-index: 1;
+}
+
+.exam-page.has-bar-ribbon .exam-exercise {
+  background: transparent !important;
 }
 
 .exam-page.is-exporting .exercise-body {
