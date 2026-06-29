@@ -1,0 +1,48 @@
+.white-mask {
+  position: absolute !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: 0 0 0 1px #ffffff !important;
+  z-index: 35 !important;
+  cursor: move !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+}
+
+.mask-delete-button {
+  position: absolute !important;
+  top: -12px !important;
+  right: -12px !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  border: 2px solid #ffffff !important;
+  background: #b91c1c !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  line-height: 16px !important;
+  z-index: 40 !important;
+  cursor: pointer !important;
+}
+
+.mask-resize-handle {
+  position: absolute !important;
+  right: -7px !important;
+  bottom: -7px !important;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 4px !important;
+  border: 2px solid #111111 !important;
+  background: #ffffff !important;
+  z-index: 40 !important;
+  cursor: nwse-resize !important;
+}
+
+.exam-page.is-exporting .mask-delete-button,
+.exam-page.is-exporting .mask-resize-handle {
+  display: none !important;
+}
