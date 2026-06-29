@@ -25,6 +25,7 @@ import './narrow-side-menu.css';
 import './rounded-header-corners.css';
 import './exercise-under-header-spacing.css';
 import './exercise-top-border-fix.css';
+import './force-total-card.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
