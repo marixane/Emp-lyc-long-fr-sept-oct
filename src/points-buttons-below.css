@@ -1,0 +1,27 @@
+.exercise-title-controls {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  row-gap: 2px !important;
+}
+
+.exercise-title-controls strong {
+  order: 1;
+}
+
+.exercise-title-controls button {
+  order: 2;
+  margin-top: 2px !important;
+  background: #eef6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #93c5fd !important;
+  box-shadow: none !important;
+}
+
+.exercise-title-controls button:first-of-type {
+  margin-left: 116px !important;
+}
+
+.exercise-title-controls .points-decoration:last-child {
+  order: 3;
+}
