@@ -47,10 +47,14 @@ function syncLanguageButton() {
 
 function syncExerciseTitles() {
   document.querySelectorAll('.exam-exercise:not(.blank-exercise) .exercise-title-controls > span:first-child').forEach(function (span) {
+    var controls = span.closest('.exercise-title-controls');
     var text = span.textContent || '';
     var match = text.match(/(?:Exercice|\u062a\u0645\u0631\u064a\u0646)\s*(\d+)/i);
     if (!match) return;
-    var next = window.__examLanguage === 'ar' ? '\u062a\u0645\u0631\u064a\u0646 ' + match[1] + ' :' : 'Exercice ' + match[1] + ' :';
+    var isHomeworkTitle = controls && !controls.querySelector('button');
+    var next = window.__examLanguage === 'ar'
+      ? '\u062a\u0645\u0631\u064a\u0646 ' + match[1] + (isHomeworkTitle ? '' : ' :')
+      : 'Exercice ' + match[1] + (isHomeworkTitle ? '' : ' :');
     if (span.textContent !== next) span.textContent = next;
   });
 }
