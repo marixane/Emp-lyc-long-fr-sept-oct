@@ -17,15 +17,22 @@ const RIGHT_TITLE_TOP = 'Lycée El jamai ,Tanger';
 const RIGHT_TITLE_BOTTOM = 'N° : 1 Semestre : 1';
 
 const clamp = (v, a, b) => Math.min(Math.max(Number(v), a), b);
-const fitSize = (text, big = 17, min = 7) => {
-  const n = String(text ?? '').trim().length;
-  if (n <= 14) return big;
-  const size = big - (n - 14) * 0.32;
+const textWeight = (text) => Array.from(String(text ?? '').trim()).reduce((sum, ch) => {
+  if (ch === ' ') return sum + 0.35;
+  if (',.;:!|'.includes(ch)) return sum + 0.25;
+  if ('mwMW'.includes(ch)) return sum + 1.35;
+  if (/[A-ZÀ-Ý]/.test(ch)) return sum + 1.12;
+  return sum + 1;
+}, 0);
+const fitSize = (text, big = 17, min = 7, limit = 14, speed = 0.48) => {
+  const w = textWeight(text);
+  if (w <= limit) return big;
+  const size = big - (w - limit) * speed;
   return Math.round(clamp(size, min, big) * 10) / 10;
 };
-const classSize = (text) => fitSize(text, 18, 8);
-const titleTopSize = (text) => fitSize(text, 20, 8);
-const rightTopSize = (text) => fitSize(text, 21, 8);
+const classSize = (text) => fitSize(text, 18, 8, 13, 0.5);
+const titleTopSize = (text) => fitSize(text, 20, 8, 12, 0.52);
+const rightTopSize = (text) => fitSize(text, 21, 8, 12, 0.55);
 const fmt = (v) => {
   const n = Math.round(Number(v) * 100) / 100;
   return `${Number.isInteger(n) ? n : String(n).replace('.', ',')} ${n === 1 ? 'Point' : 'Points'}`;
