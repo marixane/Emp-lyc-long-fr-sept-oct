@@ -1,0 +1,10 @@
+.exercise-title-controls:not(:has(strong)) span::after {
+  content: ' :' !important;
+}
+
+.exercise-title-controls:not(:has(strong)) {
+  padding-left: 8px !important;
+  padding-right: 10px !important;
+  min-width: auto !important;
+  width: auto !important;
+}
