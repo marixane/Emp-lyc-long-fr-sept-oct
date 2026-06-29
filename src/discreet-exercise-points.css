@@ -21,7 +21,7 @@
 }
 
 .exercise-title-controls .points-decoration:last-of-type {
-  transform: translateX(-8px) !important;
+  transform: translateX(-34px) !important;
 }
 
 .exercise-title-controls .points-decoration::after {
