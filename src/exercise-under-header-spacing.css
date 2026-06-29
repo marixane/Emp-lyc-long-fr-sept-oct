@@ -1,5 +1,5 @@
 .exam-page:not(.second-page) .exercise-list {
-  margin-top: 0 !important;
+  margin-top: 0.5mm !important;
 }
 
 .exam-page:not(.second-page) .exam-exercise:first-child {
