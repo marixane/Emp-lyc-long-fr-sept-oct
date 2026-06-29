@@ -47,6 +47,8 @@ import './fix-points-parentheses.js';
 import './pdf-exercise-points-clean.css';
 import './homework-exercise-title-fix.css';
 import './bar-ribbon-label.css';
+import './arabic-mode.css';
+import './arabic-mode.js';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
