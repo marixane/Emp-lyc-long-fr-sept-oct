@@ -6,38 +6,38 @@
 .note-scale-control {
   box-sizing: border-box !important;
   width: 100% !important;
-  min-height: 86px !important;
-  margin-top: 5px !important;
-  padding: 8px !important;
-  border-radius: 10px !important;
+  min-height: 118px !important;
+  margin-top: 6px !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
   background: #ffffff !important;
   border: 1px solid #d1d5db !important;
 }
 
 .note-scale-title {
   color: #374151 !important;
-  font-size: 13px !important;
+  font-size: 15px !important;
   font-weight: 950 !important;
-  line-height: 1 !important;
-  margin-bottom: 7px !important;
+  line-height: 1.1 !important;
+  margin-bottom: 10px !important;
   text-align: center !important;
 }
 
 .note-scale-buttons {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 7px !important;
+  gap: 9px !important;
 }
 
 .note-scale-button {
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 0 6px !important;
-  border-radius: 8px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 8px !important;
+  border-radius: 9px !important;
   border: 1px solid #d1d5db !important;
   background: #ffffff !important;
   color: #374151 !important;
-  font-size: 13px !important;
+  font-size: 15px !important;
   font-weight: 950 !important;
   line-height: 1 !important;
   cursor: pointer !important;
@@ -50,12 +50,15 @@
 }
 
 .note-scale-counter {
-  margin-top: 9px !important;
-  padding-top: 3px !important;
-  min-height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 12px !important;
+  padding-top: 4px !important;
+  min-height: 42px !important;
   color: #111827 !important;
-  font-size: 24px !important;
+  font-size: 34px !important;
   font-weight: 950 !important;
-  line-height: 1.1 !important;
+  line-height: 1 !important;
   text-align: center !important;
 }
