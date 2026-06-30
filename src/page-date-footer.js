@@ -1,4 +1,4 @@
-window.__showPageDate = window.__showPageDate === true;
+window.__showPageDate = window.__showPageDate !== false;
 window.__pageDateValue = window.__pageDateValue || new Date().toISOString().slice(0, 10);
 
 function formatDateValue(value) {
@@ -58,7 +58,7 @@ function ensureDateControls() {
 
   if (!document.querySelector('.page-date-control')) {
     var wrap = document.createElement('div');
-    wrap.className = 'page-date-control off';
+    wrap.className = window.__showPageDate ? 'page-date-control on' : 'page-date-control off';
     wrap.setAttribute('role', 'button');
     wrap.tabIndex = 0;
     wrap.title = 'Cliquer sur le cadre pour afficher/masquer la date. Cliquer sur le calendrier pour choisir la date.';
