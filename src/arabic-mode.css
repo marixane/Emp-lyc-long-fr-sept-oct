@@ -99,6 +99,8 @@ body.arabic-mode .exam-page.has-bar-ribbon .bar-mark {
 body.arabic-mode .exam-page .exercise-title {
   left: auto !important;
   right: 12px !important;
+  padding-left: 24px !important;
+  padding-right: 16px !important;
 }
 
 body.arabic-mode .resize-handle {
