@@ -82,6 +82,21 @@ function syncLanguageButton() {
     else panel.insertBefore(button, panel.firstChild);
   }
 
+  var individualButton = document.querySelector('.individual-toggle');
+  if (!individualButton) {
+    individualButton = document.createElement('button');
+    individualButton.className = 'individual-toggle';
+    individualButton.type = 'button';
+    individualButton.textContent = 'Individel';
+    individualButton.addEventListener('click', function () {
+      var barButton = document.querySelector('.bar-ribbon-toggle');
+      if (barButton) barButton.click();
+    });
+
+    if (button.nextSibling) panel.insertBefore(individualButton, button.nextSibling);
+    else panel.appendChild(individualButton);
+  }
+
   button.textContent = window.__examLanguage === 'ar' ? 'Français' : 'العربية';
 }
 
