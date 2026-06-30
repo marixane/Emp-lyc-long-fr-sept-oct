@@ -4,6 +4,7 @@ const FR_HEADER = {
   rightTop: 'Lycée El jamai ,Tanger',
   rightBottom: 'N° : 1 Semestre : 1',
   individualTitle: 'Devoir individuel',
+  freeTitle: 'Devoir libre',
   homeworkTitle: 'Devoir à la maison',
   subject: 'Mathématique',
   level: 'Classe : 2 Bac SPF'
@@ -13,6 +14,7 @@ const AR_HEADER = {
   rightTop: 'ثانوية الجامعي، طنجة',
   rightBottom: 'مادة : الرياضيات',
   individualTitle: 'فرض محروس',
+  freeTitle: 'فرض منزلي',
   homeworkTitle: 'فرض منزلي',
   subject: 'رقم 1 الدورة 1',
   level: 'قسم : 2 باك ع.ف'
@@ -49,8 +51,10 @@ function syncHeaderLanguage() {
   if (titleTop) {
     var currentTop = titleTop.value || '';
     var isIndividual = currentTop === FR_HEADER.individualTitle || currentTop === AR_HEADER.individualTitle;
+    var isFree = currentTop === FR_HEADER.freeTitle || currentTop === AR_HEADER.freeTitle;
     var isHomework = currentTop === FR_HEADER.homeworkTitle || currentTop === AR_HEADER.homeworkTitle;
     if (isIndividual) setInputValue('.title-line-top', header.individualTitle);
+    if (isFree) setInputValue('.title-line-top', header.freeTitle);
     if (isHomework) setInputValue('.title-line-top', header.homeworkTitle);
   }
 
@@ -59,6 +63,16 @@ function syncHeaderLanguage() {
     var currentMiddle = titleMiddle.value || '';
     var isSubject = currentMiddle === FR_HEADER.subject || currentMiddle === 'الرياضيات' || currentMiddle === AR_HEADER.subject;
     if (isSubject) setInputValue('.title-line-middle', header.subject);
+  }
+}
+
+function setIndividualHeaderTitle(isActive) {
+  var titleTop = document.querySelector('.title-line-top');
+  if (!titleTop) return;
+  if (window.__examLanguage === 'ar') {
+    setInputValue('.title-line-top', isActive ? AR_HEADER.freeTitle : AR_HEADER.individualTitle);
+  } else {
+    setInputValue('.title-line-top', isActive ? FR_HEADER.freeTitle : FR_HEADER.individualTitle);
   }
 }
 
@@ -75,6 +89,7 @@ function syncLanguageButton() {
       window.__examLanguage = window.__examLanguage === 'ar' ? 'fr' : 'ar';
       localStorage.setItem('examLanguage', window.__examLanguage);
       syncLanguageMode();
+      setIndividualHeaderTitle(document.body.classList.contains('no-title-points'));
     });
 
     var title = panel.querySelector('.eyebrow');
@@ -90,8 +105,11 @@ function syncLanguageButton() {
     individualButton.textContent = 'Individel';
     individualButton.addEventListener('click', function () {
       document.body.classList.toggle('no-title-points');
+      var active = document.body.classList.contains('no-title-points');
+      setIndividualHeaderTitle(active);
       var barButton = document.querySelector('.bar-ribbon-toggle');
       if (barButton) barButton.click();
+      syncLanguageButton();
     });
 
     if (button.nextSibling) panel.insertBefore(individualButton, button.nextSibling);
