@@ -92,10 +92,39 @@ function setIndividualHeaderTitle(isActive) {
 }
 
 function syncPanelLabels() {
+  var isArabic = window.__examLanguage === 'ar';
+
   var notesTitle = document.querySelector('.note-scale-title');
-  if (notesTitle) {
-    notesTitle.textContent = window.__examLanguage === 'ar' ? 'النقط :' : 'Notes :';
+  if (notesTitle) notesTitle.textContent = isArabic ? 'النقط :' : 'Notes :';
+
+  var linesButton = document.querySelector('.pdf-lines-toggle');
+  if (linesButton) {
+    var linesVisible = linesButton.classList.contains('on');
+    linesButton.textContent = isArabic
+      ? (linesVisible ? 'أسطر ظاهرة في PDF' : 'أسطر مخفية في PDF')
+      : (linesVisible ? 'Lignes visibles dans le PDF' : 'Lignes masquées dans le PDF');
   }
+
+  var barButton = document.querySelector('.bar-ribbon-toggle');
+  if (barButton) {
+    var barVisible = barButton.classList.contains('on');
+    barButton.textContent = isArabic
+      ? (barVisible ? 'سُلَّم التنقيط ظاهر' : 'سُلَّم التنقيط مخفي')
+      : (barVisible ? 'Ruban de barème visible' : 'Ruban de barème masqué');
+  }
+
+  var totalCounter = document.querySelector('.note-scale-counter');
+  if (totalCounter) {
+    totalCounter.textContent = totalCounter.textContent
+      .replace(/^Total\s*:/, isArabic ? 'المجموع :' : 'Total :')
+      .replace(/^المجموع\s*:/, isArabic ? 'المجموع :' : 'Total :');
+  }
+
+  document.querySelectorAll('.page-number').forEach(function (pageNumber) {
+    pageNumber.textContent = pageNumber.textContent
+      .replace(/^Page\s+/, isArabic ? 'الصفحة ' : 'Page ')
+      .replace(/^الصفحة\s+/, isArabic ? 'الصفحة ' : 'Page ');
+  });
 }
 
 function syncLanguageButton() {
@@ -168,6 +197,17 @@ function bindDurationButtons() {
   });
 }
 
+function bindPanelButtons() {
+  document.querySelectorAll('.pdf-lines-toggle, .bar-ribbon-toggle').forEach(function (button) {
+    if (button.dataset.panelSyncBound === 'true') return;
+    button.dataset.panelSyncBound = 'true';
+    button.addEventListener('click', function () {
+      setTimeout(syncPanelLabels, 0);
+      setTimeout(syncPanelLabels, 40);
+    });
+  });
+}
+
 function syncExerciseTitles() {
   document.querySelectorAll('.exam-exercise:not(.blank-exercise) .exercise-title-controls > span:first-child').forEach(function (span) {
     var controls = span.closest('.exercise-title-controls');
@@ -189,6 +229,7 @@ function syncLanguageMode() {
   syncPanelLabels();
   syncHeaderLanguage();
   bindDurationButtons();
+  bindPanelButtons();
   scheduleDurationSync();
   syncExerciseTitles();
   if (typeof formatExercisePointLabels === 'function') formatExercisePointLabels();
@@ -203,6 +244,7 @@ new MutationObserver(function () {
   syncPanelLabels();
   syncHeaderLanguage();
   bindDurationButtons();
+  bindPanelButtons();
   scheduleDurationSync();
   syncExerciseTitles();
 }).observe(document.body, { childList: true, subtree: true });
