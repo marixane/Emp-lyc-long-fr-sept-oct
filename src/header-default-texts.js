@@ -8,8 +8,13 @@ const setReactTextareaValue = (textarea, value) => {
 const updateHeaderDefaults = () => {
   if (document.body.classList.contains('arabic-mode')) return;
 
+  const middle = document.querySelector('.title-line-middle');
   const bottom = document.querySelector('.title-line-bottom');
   const rightBottom = document.querySelector('.right-line-bottom');
+
+  if (middle?.value === 'Mathématique') {
+    setReactTextareaValue(middle, 'N° : 1 Semestre : 1');
+  }
 
   if (bottom?.value === 'N° : 1 Semestre : 1') {
     setReactTextareaValue(bottom, 'Matière: Mathématique');
