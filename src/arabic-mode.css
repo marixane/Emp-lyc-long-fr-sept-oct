@@ -36,6 +36,13 @@ body.arabic-mode .exam-page .page-date {
   transform: translateX(-50%) scaleX(-1) !important;
 }
 
+body.arabic-mode .exam-page::after {
+  content: 'من إنجاز ذ٠ مروان، ثانوية الجامعي، طنجة٠' !important;
+  direction: rtl !important;
+  unicode-bidi: isolate !important;
+  text-align: right !important;
+}
+
 body.arabic-mode .exam-page.has-bar-ribbon .exercise-body::before {
   left: auto !important;
   right: -6px !important;
