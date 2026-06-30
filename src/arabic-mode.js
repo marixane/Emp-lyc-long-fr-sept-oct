@@ -132,7 +132,7 @@ function syncLanguageButton() {
   }
 
   var isActive = document.body.classList.contains('no-title-points');
-  individualButton.classList.toggle('active', isActive);
+  individualButton.classList.toggle('active', !isActive);
   individualButton.textContent = isActive ? 'Devoir\nlibre' : 'Devoir\nindividuel';
   button.textContent = window.__examLanguage === 'ar' ? 'Français' : 'العربية';
 }
