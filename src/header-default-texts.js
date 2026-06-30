@@ -9,9 +9,14 @@ const updateHeaderDefaults = () => {
   if (document.body.classList.contains('arabic-mode')) return;
 
   const bottom = document.querySelector('.title-line-bottom');
+  const rightBottom = document.querySelector('.right-line-bottom');
 
   if (bottom?.value === 'N° : 1 Semestre : 1') {
     setReactTextareaValue(bottom, 'Matière: Mathématique');
+  }
+
+  if (rightBottom?.value === 'N° : 1 Semestre : 1') {
+    setReactTextareaValue(rightBottom, 'Matière: Mathématique');
   }
 };
 
