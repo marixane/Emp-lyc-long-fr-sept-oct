@@ -68,6 +68,14 @@ body.arabic-mode .exam-page.has-bar-ribbon .exam-exercise {
 body.arabic-mode .exam-page.has-bar-ribbon .bar-buttons {
   left: auto !important;
   right: 38px !important;
+  direction: rtl !important;
+  transform: scaleX(-1) !important;
+  transform-origin: center center !important;
+}
+
+body.arabic-mode .exam-page.has-bar-ribbon .bar-buttons button {
+  transform: scaleX(-1) !important;
+  transform-origin: center center !important;
 }
 
 body.arabic-mode .exam-page.has-bar-ribbon .bar-mark {
