@@ -72,5 +72,6 @@ import './top-education-navbar.js';
 import './free-exercise-title-height.css';
 import './two-page-view.css';
 import './two-page-view.js';
+import './pdf-original-size-now.js';
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
