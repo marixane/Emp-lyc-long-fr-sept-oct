@@ -23,3 +23,7 @@ body.arabic-mode.no-title-points .exam-exercise:not(.blank-exercise) .exercise-t
   max-width: max-content !important;
   padding-left: 120px !important;
 }
+
+body.arabic-mode.no-title-points .exam-exercise:not(.blank-exercise) .exercise-title-controls span:first-child {
+  transform: translateX(-30px) !important;
+}
