@@ -146,6 +146,22 @@ body .a4-page {
   justify-self: start !important;
 }
 
+body.pdf-original-size-now {
+  --sheet-scale: 1 !important;
+  --sheet-columns: 1 !important;
+}
+
+body.pdf-original-size-now .preview-zone {
+  display: block !important;
+  width: 794px !important;
+  min-width: 794px !important;
+  max-width: 794px !important;
+  transform: none !important;
+  overflow: visible !important;
+}
+
+body.pdf-original-size-now .preview-zone .a4-page,
+body.pdf-original-size-now .a4-page,
 body .preview-zone .a4-page.is-exporting,
 body .a4-page.is-exporting,
 body .preview-zone .exam-page.is-exporting,
