@@ -1,0 +1,38 @@
+.app-shell {
+  gap: 38px !important;
+  align-items: flex-start !important;
+}
+
+.preview-zone {
+  position: relative !important;
+  padding-left: 18px !important;
+  padding-bottom: 180px !important;
+  min-height: calc(100vh - 48px) !important;
+  scroll-padding-bottom: 180px !important;
+}
+
+.preview-zone::before {
+  content: '' !important;
+  position: sticky !important;
+  left: 0 !important;
+  top: 18px !important;
+  display: block !important;
+  float: left !important;
+  width: 4px !important;
+  height: calc(100vh - 84px) !important;
+  min-height: 320px !important;
+  margin-left: -18px !important;
+  margin-right: 14px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #111827, #64748b, #111827) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.6), 0 8px 24px rgba(15,23,42,0.22) !important;
+}
+
+.a4-page {
+  margin-bottom: 160px !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22) !important;
+}
+
+.a4-page:last-child {
+  margin-bottom: 220px !important;
+}
