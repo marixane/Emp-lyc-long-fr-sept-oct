@@ -86,6 +86,15 @@ function syncFreeModeBarRibbon(freeMode) {
   previousTitleMode = currentMode;
 }
 
+function hideOnlyPointControls(title, hidden) {
+  Array.from(title.children).forEach(function (node) {
+    if (node.classList && node.classList.contains('exercise-line-count-controls')) return;
+    if (node.tagName === 'BUTTON' || node.tagName === 'STRONG' || (node.classList && node.classList.contains('points-decoration'))) {
+      updateDisplay(node, hidden);
+    }
+  });
+}
+
 function cleanFreeModeExerciseTitles() {
   var freeMode = isFreeModeActive();
   syncFreeModeBodyClass();
@@ -98,10 +107,12 @@ function cleanFreeModeExerciseTitles() {
 
     if (freeMode && span && match) span.textContent = match[1] + ' ' + match[2] + ' :';
 
-    title.querySelectorAll('button, strong, .points-decoration').forEach(function (node) {
-      updateDisplay(node, freeMode);
-    });
+    hideOnlyPointControls(title, freeMode);
   });
+
+  if (typeof window.syncExerciseLineControls === 'function') {
+    setTimeout(window.syncExerciseLineControls, 20);
+  }
 }
 
 function syncFreeModeClean() {
