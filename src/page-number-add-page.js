@@ -18,6 +18,10 @@ function getFooterInfo(node, fallbackIndex) {
   return { current: Number(fallbackIndex || 0) + 1, total: totalPages };
 }
 
+function getTotalPages() {
+  return Math.max(1, document.querySelectorAll('.a4-page').length || 1);
+}
+
 function getPageControlLeft(rect) {
   return rect.left + rect.width / 2 + 195;
 }
@@ -87,17 +91,15 @@ function runPageButton(event, pageNode, action) {
   var now = Date.now();
   if (runPageButton.last && now - runPageButton.last < 180) return;
   runPageButton.last = now;
-  var pageNumber = pageNode.querySelector('.page-number');
-  var pageIndex = Array.from(document.querySelectorAll('.a4-page')).indexOf(pageNode);
-  var info = getFooterInfo(pageNumber, pageIndex);
-  if (!info) return;
-  if (action === 'add') addPage(info.total);
-  if (action === 'remove') removeLastPage(info.total);
+  var total = getTotalPages();
+  if (action === 'add') addPage(total);
+  if (action === 'remove') removeLastPage(total);
 }
 
 function makeControls(pageNode) {
   var controls = document.createElement('div');
   controls.className = 'page-number-safe-controls';
+  controls.setAttribute('data-page-index', '0');
 
   var minus = document.createElement('button');
   minus.type = 'button';
@@ -124,30 +126,29 @@ function makeControls(pageNode) {
 function syncPageNumberControls() {
   ensurePageControlStyle();
 
-  document.querySelectorAll('.a4-page').forEach(function (pageNode, pageIndex) {
-    var pageNumber = pageNode.querySelector('.page-number');
-    var info = getFooterInfo(pageNumber, pageIndex);
-    if (!info) return;
-    var rect = pageNode.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
+  var pageNode = document.querySelector('.a4-page');
+  if (!pageNode) {
+    document.querySelectorAll('.page-number-safe-controls').forEach(function (controls) { controls.remove(); });
+    return;
+  }
 
-    var controls = document.querySelector('.page-number-safe-controls[data-page-index="' + pageIndex + '"]');
-    if (!controls) {
-      controls = makeControls(pageNode);
-      controls.setAttribute('data-page-index', String(pageIndex));
-      document.body.appendChild(controls);
-    }
+  var rect = pageNode.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
 
-    controls.style.left = getPageControlLeft(rect) + 'px';
-    controls.style.top = (rect.bottom - 30) + 'px';
+  var controls = document.querySelector('.page-number-safe-controls[data-page-index="0"]');
+  if (!controls) {
+    controls = makeControls(pageNode);
+    document.body.appendChild(controls);
+  }
 
-    var minus = controls.querySelector('.minus');
-    if (minus) minus.disabled = info.total <= 1;
-  });
+  controls.style.left = getPageControlLeft(rect) + 'px';
+  controls.style.top = (rect.bottom - 30) + 'px';
 
-  document.querySelectorAll('.page-number-safe-controls').forEach(function (controls) {
-    var pageIndex = Number(controls.getAttribute('data-page-index'));
-    if (!document.querySelectorAll('.a4-page')[pageIndex]) controls.remove();
+  var minus = controls.querySelector('.minus');
+  if (minus) minus.disabled = getTotalPages() <= 1;
+
+  document.querySelectorAll('.page-number-safe-controls').forEach(function (extraControls) {
+    if (extraControls !== controls) extraControls.remove();
   });
 }
 
