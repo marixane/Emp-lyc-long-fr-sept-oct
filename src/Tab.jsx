@@ -117,6 +117,25 @@ export default function Tab() {
     }));
   };
 
+  const shrinkCellRight = (dayIndex, hourIndex) => {
+    setRows((current) => current.map((row, i) => {
+      if (i !== dayIndex) return row;
+      const currentHour = hours[hourIndex];
+      const cell = normalizeCell(row.cells[currentHour]);
+      if (cell.span <= 1) return row;
+      const releasedHour = hours[hourIndex + cell.span - 1];
+
+      return {
+        ...row,
+        cells: {
+          ...row.cells,
+          [currentHour]: { ...cell, span: cell.span - 1, hidden: false },
+          [releasedHour]: createCell()
+        }
+      };
+    }));
+  };
+
   return <main className="cahier-shell clean-cahier-shell">
     <section className="cahier-preview-zone">
       <div className="a4-page cahier-page">
@@ -150,6 +169,7 @@ export default function Tab() {
                   <div className="timetable-cell-content">
                     {hasClass && <div className="span-tools no-print">
                       <button type="button" onClick={() => extendCellLeft(dayIndex, hourIndex)} disabled={!canExtendLeft(row, hourIndex)}>‹</button>
+                      {cell.span > 1 && <button type="button" className="span-remove-button" onClick={() => shrinkCellRight(dayIndex, hourIndex)}>×</button>}
                       <button type="button" onClick={() => extendCellRight(dayIndex, hourIndex)} disabled={!canExtendRight(row, hourIndex)}>›</button>
                     </div>}
                     <textarea
