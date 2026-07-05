@@ -1,11 +1,11 @@
 const EXAM_ROWS = [
-  ['Primaire', 'Examen normalisé local', '18–19 janvier 2027', 'Examen'],
-  ['Lycée', 'Examen régional 1ère Bac', '28–29 mai 2027', 'Examen'],
-  ['Lycée', 'Examen national 2ème Bac', '01–03 juin 2027', 'Examen'],
-  ['Collège', 'Examen régional', '23–24 juin 2027', 'Examen'],
-  ['Primaire', 'Examen normalisé provincial', '25–26 juin 2027', 'Examen'],
-  ['Lycée', 'Rattrapage 1ère Bac', '28–29 juin 2027', 'Rattrapage'],
-  ['Lycée', 'Rattrapage 2ème Bac', '01–03 juillet 2027', 'Rattrapage']
+  ['Primaire', 'Examen normalisé local', '18–19 janvier 2027'],
+  ['Lycée', 'Examen régional 1ère Bac', '28–29 mai 2027'],
+  ['Lycée', 'Examen national 2ème Bac', '01–03 juin 2027'],
+  ['Collège', 'Examen régional', '23–24 juin 2027'],
+  ['Primaire', 'Examen normalisé provincial', '25–26 juin 2027'],
+  ['Lycée', 'Rattrapage 1ère Bac', '28–29 juin 2027'],
+  ['Lycée', 'Rattrapage 2ème Bac', '01–03 juillet 2027']
 ];
 
 const makeExamCell = (text, header = false) => {
@@ -37,7 +37,7 @@ const buildExamTable = () => {
 
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
-  ['Cycle', 'Examen', 'Date', 'Type'].forEach((text) => headerRow.append(makeExamCell(text, true)));
+  ['Cycle', 'Examen', 'Date'].forEach((text) => headerRow.append(makeExamCell(text, true)));
   thead.append(headerRow);
 
   const tbody = document.createElement('tbody');
