@@ -414,7 +414,7 @@ export default function Tab() {
           <thead>
             <tr className="activity-top-row">
               <th colSpan="3"><div contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter} style={activityTitleStyle}>Séquence:</div></th>
-              <th colSpan="3"><div contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter} style={activityTitleStyle}>Compétences:</div></th>
+              <th colSpan="3"><div contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter} style={activityTitleStyle}>Titre et sujet de leçon :</div></th>
             </tr>
             <tr className="activity-label-row">
               <th><div contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter} style={activityLabelStyle}>Date</div></th>
@@ -425,7 +425,7 @@ export default function Tab() {
             </tr>
           </thead>
           <tbody>
-            {[0, 1, 2, 3, 4, 5].map((rowIndex) => <tr key={rowIndex}>
+            {[0, 1, 2, 3, 4].map((rowIndex) => <tr key={rowIndex}>
               <td><textarea aria-label="Date" /></td>
               <td><textarea aria-label="Heure" /></td>
               <td><textarea aria-label="Classe" /></td>
