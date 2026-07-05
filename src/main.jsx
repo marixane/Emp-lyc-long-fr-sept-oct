@@ -90,6 +90,7 @@ import './cahier-left-margin-100.css';
 import './cahier-top-space-fix.css';
 import './cahier-page-numbers.css';
 import './cahier-cover-page.js';
+import './cahier-cover-zellige-fix.js';
 import './cahier-dedupe-holiday-classes.js';
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
