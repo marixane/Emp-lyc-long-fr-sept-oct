@@ -88,13 +88,23 @@ const getCellColor = (text) => {
   return CELL_COLORS[Math.abs(hash) % CELL_COLORS.length];
 };
 
-const getSchoolYear = () => {
+const getSchoolStartYear = () => {
   const today = new Date();
-  const startYear = today.getMonth() >= 8 ? today.getFullYear() : today.getFullYear() - 1;
+  return today.getMonth() >= 8 ? today.getFullYear() : today.getFullYear() - 1;
+};
+
+const getSchoolYear = () => {
+  const startYear = getSchoolStartYear();
   return `Année scolaire : ${startYear} / ${startYear + 1}`;
 };
 const createRows = () => DAYS.map((day) => ({ day, cells: HOURS.reduce((acc, hour) => ({ ...acc, [hour]: createCell() }), {}) }));
 const getHourStart = (hour) => String(hour ?? '').split('-')[0].trim();
+const getMondayBasedDayIndex = (date) => (date.getDay() + 6) % 7;
+const chunkEntries = (entries, size) => entries.reduce((pages, entry, index) => {
+  if (index % size === 0) pages.push([]);
+  pages[pages.length - 1].push(entry);
+  return pages;
+}, []);
 
 export default function Tab() {
   const [school, setSchool] = useState('Établissement :');
@@ -127,23 +137,27 @@ export default function Tab() {
   const updateCellText = (dayIndex, hour, value) => setRows((current) => current.map((row, i) => i === dayIndex ? { ...row, cells: { ...row.cells, [hour]: { ...normalizeCell(row.cells[hour]), text: value } } } : row));
   const updateRoom = (dayIndex, hour, value) => setRows((current) => current.map((row, i) => i === dayIndex ? { ...row, cells: { ...row.cells, [hour]: { ...normalizeCell(row.cells[hour]), room: clampRoom(value) } } } : row));
 
-  const homeworkEntries = rows.slice(0, 5).map((row, index) => {
-    const sessions = hours.reduce((list, hour) => {
-      const cell = normalizeCell(row.cells[hour]);
-      if (!cell.hidden && cell.text.trim()) {
-        list.push({ hour: getHourStart(hour), className: cell.text.trim() });
-      }
-      return list;
-    }, []);
-    const dayNumber = String(index + 1).padStart(2, '0');
+  const sessionsByDay = rows.map((row) => hours.reduce((list, hour) => {
+    const cell = normalizeCell(row.cells[hour]);
+    if (!cell.hidden && cell.text.trim()) {
+      list.push({ hour: getHourStart(hour), className: cell.text.trim() });
+    }
+    return list;
+  }, []));
 
+  const homeworkEntries = Array.from({ length: 30 }, (_, index) => {
+    const date = new Date(getSchoolStartYear(), 8, index + 1);
+    const dayIndex = getMondayBasedDayIndex(date);
+    if (dayIndex >= rows.length || !sessionsByDay[dayIndex]?.length) return null;
+    const dayNumber = String(index + 1).padStart(2, '0');
     return {
-      date: `${String(row.day || DAYS[index]).toUpperCase()} ${dayNumber}/09`,
-      sessions,
+      date: `${String(rows[dayIndex]?.day || DAYS[dayIndex]).toUpperCase()} ${dayNumber}/09`,
+      sessions: sessionsByDay[dayIndex],
       text: DOT_TEXT,
-      color: HOMEWORK_COLORS[index]
+      color: HOMEWORK_COLORS[dayIndex % HOMEWORK_COLORS.length]
     };
-  }).filter((entry) => entry.sessions.length > 0);
+  }).filter(Boolean);
+  const homeworkPages = chunkEntries(homeworkEntries, 5);
 
   const canExtendLeft = (row, hourIndex) => hourIndex > 0 && Boolean(normalizeCell(row.cells[hours[hourIndex]]).text.trim()) && !normalizeCell(row.cells[hours[hourIndex - 1]]).hidden && !normalizeCell(row.cells[hours[hourIndex - 1]]).text.trim();
   const canExtendRight = (row, hourIndex) => {
@@ -274,12 +288,12 @@ export default function Tab() {
         </table>
         <footer className="cahier-footer"><span>Signature :</span><span>Observations :</span></footer>
       </div>
-      <div className="a4-page cahier-page homework-page">
-        {homeworkEntries.map((entry) => <section className="homework-entry" key={entry.date} style={{ '--homework-color': entry.color }}>
+      {homeworkPages.map((pageEntries, pageIndex) => <div className="a4-page cahier-page homework-page" key={`homework-page-${pageIndex}`}>
+        {pageEntries.map((entry) => <section className="homework-entry" key={entry.date} style={{ '--homework-color': entry.color }}>
           <div className="homework-date" contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter}>{entry.date}</div>
-          <div className="homework-content"><div className="homework-subject" contentEditable={entry.sessions.length === 0} suppressContentEditableWarning onKeyDown={validateOnEnter} style={entry.sessions.length ? subjectTextStyle : undefined}>{entry.sessions.map((session) => <div key={`${session.hour}-${session.className}`} style={sessionLineStyle}><span style={sessionHourStyle}>{session.hour}</span><span style={sessionClassStyle}>{session.className}</span></div>)}</div><div className="homework-text" contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter} style={dotTextStyle}>{entry.text}</div></div>
+          <div className="homework-content"><div className="homework-subject" contentEditable={entry.sessions.length === 0} suppressContentEditableWarning onKeyDown={validateOnEnter} style={entry.sessions.length ? subjectTextStyle : undefined}>{entry.sessions.map((session) => <div key={`${entry.date}-${session.hour}-${session.className}`} style={sessionLineStyle}><span style={sessionHourStyle}>{session.hour}</span><span style={sessionClassStyle}>{session.className}</span></div>)}</div><div className="homework-text" contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter} style={dotTextStyle}>{entry.text}</div></div>
         </section>)}
-      </div>
+      </div>)}
     </section>
   </main>;
 }
