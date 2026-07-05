@@ -1,14 +1,14 @@
 const markEmptyAutresGroups = () => {
-  if (!document.body.classList.contains('cahier-tab-active')) return;
+  if (!document.body.classList.contains('cahier-tab-active')) return false;
   const timetablePage = Array.from(document.querySelectorAll('.cahier-page'))
     .find((page) => page.querySelector('.timetable-table'));
-  if (!timetablePage) return;
+  if (!timetablePage) return false;
 
   const groupsWrap = Array.from(timetablePage.children).find((child) => {
     const style = child.getAttribute('style') || '';
     return style.includes('grid-template-columns: repeat(5');
   });
-  if (!groupsWrap) return;
+  if (!groupsWrap) return false;
 
   Array.from(groupsWrap.children).forEach((group) => {
     const title = String(group.children?.[0]?.textContent || '').trim().toUpperCase();
@@ -21,6 +21,7 @@ const markEmptyAutresGroups = () => {
     group.classList.remove('cahier-empty-other-group', 'cahier-filled-other-group');
     if (wantedClass) group.classList.add(wantedClass);
   });
+  return true;
 };
 
 let autresGroupsRaf = 0;
@@ -32,15 +33,21 @@ const scheduleMarkEmptyAutresGroups = () => {
   });
 };
 
+let autresGroupsRetryCount = 0;
+const retryMarkEmptyAutresGroups = () => {
+  const done = markEmptyAutresGroups();
+  if (!done && autresGroupsRetryCount < 18) {
+    autresGroupsRetryCount += 1;
+    window.setTimeout(retryMarkEmptyAutresGroups, 250);
+  }
+};
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', scheduleMarkEmptyAutresGroups, { once: true });
+  document.addEventListener('DOMContentLoaded', retryMarkEmptyAutresGroups, { once: true });
 } else {
-  scheduleMarkEmptyAutresGroups();
+  retryMarkEmptyAutresGroups();
 }
 
-new MutationObserver(scheduleMarkEmptyAutresGroups).observe(document.body, {
-  childList: true,
-  subtree: true,
-  attributes: true,
-  attributeFilter: ['class']
-});
+document.addEventListener('input', scheduleMarkEmptyAutresGroups, { passive: true });
+document.addEventListener('drop', () => window.setTimeout(scheduleMarkEmptyAutresGroups, 120), { passive: true });
+document.addEventListener('mouseup', () => window.setTimeout(scheduleMarkEmptyAutresGroups, 120), { passive: true });
