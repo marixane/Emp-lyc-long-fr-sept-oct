@@ -94,6 +94,5 @@ import './cahier-cover-zellige-fix.js';
 import './cahier-dedupe-holiday-classes.js';
 import './cahier-window-scroll-fix.css';
 import './cahier-force-scroll.js';
-import './cahier-scroll-wheel-final.js';
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
