@@ -106,6 +106,5 @@ import './cahier-hide-empty-group-pages.js';
 import './cahier-fixed-five-entries.css';
 import './cahier-group-cover-pages.css';
 import './cahier-group-cover-pages.js';
-import './cahier-july-complete.js';
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
