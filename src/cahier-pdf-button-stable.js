@@ -51,34 +51,54 @@ const prepareClone = (clone) => {
   clone.style.setProperty('overflow', 'hidden', 'important');
 };
 
-const getLastHomeworkHeader = (zone) => {
-  const homeworkPages = Array.from(zone.querySelectorAll('.homework-page'));
-  const lastHomeworkPage = homeworkPages[homeworkPages.length - 1];
-  return lastHomeworkPage?.firstElementChild?.cloneNode(true) || null;
+const getGroupKey = (page) => {
+  const color = page.style.getPropertyValue('--group-color').trim();
+  const title = page.firstElementChild?.textContent?.trim() || '';
+  return color || title;
 };
 
-const appendExitPageIfMissing = (zone) => {
-  if (String(zone.textContent || '').includes(EXIT_TEXT)) return;
+const makeFallbackHeader = () => {
+  const header = document.createElement('div');
+  header.style.cssText = 'position:absolute;top:10px;left:50px;right:18px;height:42px;display:grid;grid-template-columns:230px 1fr;align-items:center;gap:18px;border-radius:12px;background:#fef3c7;color:#111827;padding:0 18px;box-shadow:0 2px 6px rgba(17,17,17,.12);font:900 20px Arial,sans-serif;text-transform:uppercase;';
+  header.textContent = 'Administration';
+  return header;
+};
 
+const makeExitPage = (sourcePage) => {
+  const color = sourcePage.style.getPropertyValue('--group-color').trim() || '#fef3c7';
   const page = document.createElement('div');
   page.className = 'a4-page cahier-page homework-page cahier-pdf-exit-page';
-  page.style.cssText = 'position:relative;padding-top:60px;--group-color:#fef3c7;';
+  page.style.cssText = `position:relative;padding-top:60px;--group-color:${color};`;
 
-  const header = getLastHomeworkHeader(zone);
-  if (header) page.append(header);
-  else {
-    const h = document.createElement('div');
-    h.style.cssText = 'position:absolute;top:10px;left:50px;right:18px;height:42px;display:grid;grid-template-columns:230px 1fr;align-items:center;gap:18px;border-radius:12px;background:#fef3c7;color:#111827;padding:0 18px;box-shadow:0 2px 6px rgba(17,17,17,.12);font:900 20px Arial,sans-serif;text-transform:uppercase;';
-    h.textContent = 'Administration';
-    page.append(h);
-  }
+  const header = sourcePage.firstElementChild?.cloneNode(true) || makeFallbackHeader();
+  page.append(header);
 
   const section = document.createElement('section');
   section.className = 'homework-entry cahier-extra-holiday-entry';
   section.style.setProperty('--homework-color', '#f97316');
   section.innerHTML = '<div class="homework-date">VENDREDI 10/07</div><div class="homework-content"><div class="homework-subject"><div><span>Administration</span></div></div><div class="homework-text" style="color:#9a3412;font-size:21px;font-weight:900;text-align:center;background:linear-gradient(90deg,rgba(254,215,170,.38),rgba(254,243,199,.62));border-radius:12px;margin:8px 18px;padding:10px 16px">' + EXIT_TEXT + '</div></div>';
   page.append(section);
-  zone.append(page);
+  return page;
+};
+
+const appendExitPageForEachGroup = (zone) => {
+  const groups = [];
+  Array.from(zone.querySelectorAll('.homework-page:not(.cahier-pdf-exit-page)')).forEach((page) => {
+    const key = getGroupKey(page);
+    if (!key) return;
+    let group = groups.find((item) => item.key === key);
+    if (!group) {
+      group = { key, pages: [] };
+      groups.push(group);
+    }
+    group.pages.push(page);
+  });
+
+  groups.forEach((group) => {
+    if (group.pages.some((page) => String(page.textContent || '').includes(EXIT_TEXT))) return;
+    const lastPage = group.pages[group.pages.length - 1];
+    if (lastPage) lastPage.after(makeExitPage(lastPage));
+  });
 };
 
 const buildExportHtml = () => {
@@ -103,7 +123,7 @@ const buildExportHtml = () => {
     zone.append(clone);
   });
 
-  appendExitPageIfMissing(zone);
+  appendExitPageForEachGroup(zone);
 
   return `<style>${getCss()}\n${EXPORT_CSS}</style>${zone.outerHTML}`;
 };
