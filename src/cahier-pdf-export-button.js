@@ -2,18 +2,21 @@ const PDF_BUTTON_ID = 'cahier-pdf-export-button';
 
 const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
+const A4_WIDTH = 794;
+const A4_HEIGHT = 1123;
+
 const PDF_EXPORT_CSS = `
-  @page { size: A4 portrait; margin: 0; }
+  @page { size: ${A4_WIDTH}px ${A4_HEIGHT}px; margin: 0; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   html, body {
-    width: 210mm !important;
+    width: ${A4_WIDTH}px !important;
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
     overflow: visible !important;
   }
   #root, .app-shell, .cahier-shell, .clean-cahier-shell, .cahier-preview-zone {
-    width: 210mm !important;
+    width: ${A4_WIDTH}px !important;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
@@ -28,12 +31,12 @@ const PDF_EXPORT_CSS = `
   .a4-page, .cahier-page {
     display: block !important;
     position: relative !important;
-    width: 210mm !important;
-    min-width: 210mm !important;
-    max-width: 210mm !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
-    max-height: 297mm !important;
+    width: ${A4_WIDTH}px !important;
+    min-width: ${A4_WIDTH}px !important;
+    max-width: ${A4_WIDTH}px !important;
+    height: ${A4_HEIGHT}px !important;
+    min-height: ${A4_HEIGHT}px !important;
+    max-height: ${A4_HEIGHT}px !important;
     margin: 0 !important;
     padding: 0 !important;
     transform: none !important;
