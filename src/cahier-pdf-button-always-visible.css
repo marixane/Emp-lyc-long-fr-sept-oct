@@ -1,0 +1,42 @@
+.cahier-pdf-export-button {
+  position: fixed !important;
+  right: 22px !important;
+  bottom: 22px !important;
+  z-index: 2147483647 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: auto !important;
+  min-width: 180px !important;
+  max-width: none !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 14px 22px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #16a34a !important;
+  color: #ffffff !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28) !important;
+  cursor: pointer !important;
+}
+
+.cahier-pdf-export-button:hover {
+  background: #15803d !important;
+}
+
+.cahier-pdf-export-button:disabled {
+  opacity: 0.75 !important;
+  cursor: wait !important;
+}
+
+@media print {
+  .cahier-pdf-export-button {
+    display: none !important;
+  }
+}
