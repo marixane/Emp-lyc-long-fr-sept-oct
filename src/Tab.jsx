@@ -33,6 +33,7 @@ const MANDATORY_EVENTS = [
   { start: '03/07', end: '04/07', label: 'Lycée', text: 'Rattrapage : 1ère Bac', type: 'exam' },
   { start: '06/07', end: '09/07', label: 'Lycée', text: 'Rattrapage : 2ème Bac', type: 'exam' }
 ];
+const EXAM_EVENTS = MANDATORY_EVENTS.filter((event) => event.type === 'exam');
 const SCHOOL_PROGRESS_FLAGS = [
   { date: '19/10', label: 'Vacances intermédiaires 1' },
   { date: '07/12', label: 'Vacances intermédiaires 2' },
@@ -61,6 +62,11 @@ const levelGroupsStyle = { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)
 const levelGroupTitleStyle = { marginBottom: '8px', color: '#111827', fontSize: '12px', fontWeight: 900, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.3px' };
 const levelGroupClassesStyle = { display: 'flex', flexDirection: 'column', alignItems: 'stretch', justifyContent: 'flex-start', gap: '7px', minHeight: '130px', color: 'rgba(17, 17, 17, 0.45)', fontSize: '10px', fontWeight: 800, lineHeight: 1.1, textAlign: 'center' };
 const levelChipStyle = { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: '28px', padding: '7px 9px', borderRadius: '9px', border: '1px solid rgba(17, 17, 17, 0.22)', color: '#111827', fontSize: '12px', fontWeight: 900, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', cursor: 'grab', boxShadow: '0 1px 3px rgba(17, 17, 17, 0.12)' };
+const examListWrapStyle = { marginTop: '10px', border: '2px solid rgba(30, 58, 138, 0.35)', borderRadius: '14px', overflow: 'hidden', background: 'rgba(219, 234, 254, 0.45)' };
+const examListTitleStyle = { padding: '7px 12px', background: 'linear-gradient(90deg, rgba(191,219,254,0.9), rgba(239,246,255,0.95))', color: '#111827', fontSize: '13px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3px' };
+const examListTableStyle = { width: '100%', borderCollapse: 'collapse', fontFamily: 'Arial, sans-serif', background: 'white' };
+const examListHeaderCellStyle = { padding: '6px 7px', border: '1px solid rgba(30, 58, 138, 0.18)', background: '#dbeafe', color: '#111827', fontSize: '11px', fontWeight: 900, textAlign: 'center', textTransform: 'uppercase' };
+const examListCellStyle = { padding: '6px 7px', border: '1px solid rgba(30, 58, 138, 0.16)', color: '#1f2937', fontSize: '11px', fontWeight: 800, textAlign: 'center', lineHeight: 1.2 };
 const groupHomeworkHeaderStyle = { position: 'absolute', top: '10px', left: '50px', right: '18px', height: '42px', display: 'grid', gridTemplateColumns: '230px 1fr', alignItems: 'center', gap: '18px', borderRadius: '12px', background: 'var(--group-color)', color: '#111827', padding: '0 18px', boxShadow: '0 2px 6px rgba(17, 17, 17, 0.12)' };
 const groupHomeworkTitleStyle = { fontSize: '20px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4px', textAlign: 'left', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' };
 const progressWrapStyle = { display: 'grid', gridTemplateColumns: '1fr 46px', alignItems: 'center', gap: '10px' };
@@ -368,6 +374,13 @@ export default function Tab() {
             })}
           </tr>)}</tbody>
         </table>
+        <section className="cahier-exams-list" style={examListWrapStyle}>
+          <div style={examListTitleStyle}>Liste des examens</div>
+          <table style={examListTableStyle}>
+            <thead><tr><th style={examListHeaderCellStyle}>Début</th><th style={examListHeaderCellStyle}>Fin</th><th style={examListHeaderCellStyle}>Cycle</th><th style={examListHeaderCellStyle}>Examen</th></tr></thead>
+            <tbody>{EXAM_EVENTS.map((exam) => <tr key={`${exam.start}-${exam.end}-${exam.text}`}><td style={examListCellStyle}>{exam.start}</td><td style={examListCellStyle}>{exam.end}</td><td style={examListCellStyle}>{exam.label}</td><td style={{ ...examListCellStyle, textAlign: 'left' }}>{exam.text.replace('Examen : ', '').replace('Rattrapage : ', 'Rattrapage - ')}</td></tr>)}</tbody>
+          </table>
+        </section>
         <div style={levelGroupsStyle}>
           {classGroups.map((group, index) => <div key={`${GROUP_TITLES[index]}-${index}`} style={{ minHeight: '192px', padding: '11px 9px', border: '2px solid rgba(17, 17, 17, 0.55)', borderRadius: '14px', background: `linear-gradient(180deg, ${GROUP_COLORS[index]}, white)`, boxShadow: '0 4px 10px rgba(17, 17, 17, 0.12)', overflow: 'hidden' }} onDragOver={(event) => { if (draggedClass) event.preventDefault(); }} onDrop={(event) => { event.preventDefault(); if (draggedClass) moveClassToGroup(draggedClass, index); setDraggedClass(null); }}>
             <div style={levelGroupTitleStyle} contentEditable suppressContentEditableWarning onKeyDown={validateOnEnter}>{GROUP_TITLES[index]}</div>
