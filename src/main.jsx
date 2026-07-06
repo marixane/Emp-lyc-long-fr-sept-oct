@@ -96,6 +96,9 @@ import './cahier-fixed-five-entries.css';
 // Bouton PDF stable : permanent, devant tout, sans observer lourd.
 import './cahier-pdf-button-stable.js';
 
+// Page d'accueil de groupe + fin garantie au 10/07.
+import './cahier-group-cover-july10-light.js';
+
 // RESET STABILITÉ : autres scripts DOM cahier désactivés pendant la saisie.
 // import './cahier-cover-zellige-fix.js';
 // import './cahier-window-scroll-fix.css';
