@@ -27,7 +27,7 @@ const getJulyGroups = () => {
 const removeWrongNativeJulyEntries = () => {
   document.querySelectorAll('.homework-page:not([data-cahier-july-complete="true"]) .homework-entry:not(.cahier-exam-entry):not(.cahier-extra-holiday-entry)').forEach((entry) => {
     const date = getJulyDate(entry.querySelector('.homework-date')?.textContent || '');
-    if (date?.month === 7 && date.day >= 4) entry.remove();
+    if (date?.month === 7 && date.day >= 1) entry.remove();
   });
 };
 
