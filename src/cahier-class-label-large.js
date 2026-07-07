@@ -6,14 +6,23 @@ const resizeClassLabels = () => {
     if (!label) return;
 
     const count = line.parentElement?.children?.length || 1;
-    const size = count >= 4 ? 8 : count === 3 ? 12 : 16;
+    const startSize = count >= 4 ? 18 : count === 3 ? 22 : 26;
+    const minSize = 8;
+    const availableWidth = Math.max(label.clientWidth - 2, 0);
 
-    label.style.setProperty('font-size', `${size}px`, 'important');
     label.style.setProperty('font-weight', '900', 'important');
     label.style.setProperty('transform', 'none', 'important');
     label.style.setProperty('overflow', 'hidden', 'important');
     label.style.setProperty('text-overflow', 'clip', 'important');
     label.style.setProperty('white-space', 'nowrap', 'important');
+
+    let size = startSize;
+    label.style.setProperty('font-size', `${size}px`, 'important');
+
+    while (size > minSize && label.scrollWidth > availableWidth) {
+      size = Math.max(minSize, size - 2);
+      label.style.setProperty('font-size', `${size}px`, 'important');
+    }
   });
 };
 
