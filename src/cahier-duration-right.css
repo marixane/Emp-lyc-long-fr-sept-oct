@@ -13,8 +13,8 @@
 }
 
 .homework-subject > div > span:nth-child(2) {
-  width: calc(100% + 5px) !important;
-  max-width: calc(100% + 5px) !important;
+  width: calc(100% + 10px) !important;
+  max-width: calc(100% + 10px) !important;
 }
 
 .cahier-session-duration {
