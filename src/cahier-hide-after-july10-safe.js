@@ -4,14 +4,28 @@ const isAfterJuly10 = (text) => {
 };
 
 const updateJulyVisibility = () => {
-  document.querySelectorAll('.homework-entry').forEach((entry) => {
-    const dateText = entry.querySelector('.homework-date')?.textContent || '';
-    if (isAfterJuly10(dateText)) {
-      entry.hidden = true;
-      entry.style.setProperty('display', 'none', 'important');
+  document.querySelectorAll('.homework-page').forEach((page) => {
+    const entries = Array.from(page.querySelectorAll('.homework-entry'));
+
+    entries.forEach((entry) => {
+      const dateText = entry.querySelector('.homework-date')?.textContent || '';
+      const shouldHide = isAfterJuly10(dateText);
+      entry.hidden = shouldHide;
+
+      if (shouldHide) {
+        entry.style.setProperty('display', 'none', 'important');
+      } else {
+        entry.style.removeProperty('display');
+      }
+    });
+
+    const hasVisibleEntry = entries.some((entry) => !entry.hidden);
+    page.hidden = entries.length > 0 && !hasVisibleEntry;
+
+    if (page.hidden) {
+      page.style.setProperty('display', 'none', 'important');
     } else {
-      entry.hidden = false;
-      entry.style.removeProperty('display');
+      page.style.removeProperty('display');
     }
   });
 };
