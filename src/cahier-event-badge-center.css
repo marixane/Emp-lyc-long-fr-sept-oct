@@ -18,7 +18,22 @@
 
 .cahier-extra-holiday-entry .homework-subject > div,
 .cahier-exam-entry .homework-subject > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: 100% !important;
   margin-top: auto !important;
   margin-bottom: auto !important;
+  grid-template-columns: none !important;
+}
+
+.cahier-extra-holiday-entry .homework-subject > div > span:first-child,
+.cahier-exam-entry .homework-subject > div > span:first-child {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.cahier-extra-holiday-entry .homework-subject > div > span:last-child:empty,
+.cahier-exam-entry .homework-subject > div > span:last-child:empty {
+  display: none !important;
 }
