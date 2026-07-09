@@ -26,7 +26,8 @@ const correctSchoolCalendar = () => ({
       ["const getMandatoryEventStart = (monthDate) => MANDATORY_EVENTS.filter((event) => event.start === monthDate);", "const getMandatoryEventStart = (monthDate) => PAGE_EVENTS.filter((event) => event.start === monthDate);"],
       ["const isInsideMandatoryEventAfterStart = (monthDate) => MANDATORY_EVENTS.some((event) => {", "const isInsideMandatoryEventAfterStart = (monthDate) => PAGE_EVENTS.some((event) => {"],
       ["const isInsideHolidayEvent = (monthDate) => MANDATORY_EVENTS.some((event) => {", "const isInsideHolidayEvent = (monthDate) => PAGE_EVENTS.some((event) => {"],
-      ["applySessionDurationsForPdf(zone);\n  removeAfterJuly10(zone);", "applySessionDurationsForPdf(zone);\n  zone.querySelectorAll('.homework-date').forEach((node) => node.style.setProperty('font-size', '28px', 'important'));\n  removeAfterJuly10(zone);"]
+      [".homework-date { font-size: 28px !important; }", ".homework-date { font-size: 22px !important; }"],
+      ["applySessionDurationsForPdf(zone);\n  removeAfterJuly10(zone);", "applySessionDurationsForPdf(zone);\n  zone.querySelectorAll('.homework-date').forEach((node) => node.style.setProperty('font-size', '22px', 'important'));\n  removeAfterJuly10(zone);"]
     ];
 
     let transformed = code;
