@@ -115,6 +115,7 @@ import './cahier-event-badge-center.css';
 // Il ne modifie les pages qu'au moment de générer le PDF.
 import './cahier-pdf-button-safari-safe.js';
 import './cahier-pdf-class-size-fix.js';
+import './cahier-first-saturday-visibility.js';
 
 // Désactivé : ce helper DOM faisait buguer l'ajout de plusieurs séances.
 // import './cahier-group-cover-july10-light.js';
