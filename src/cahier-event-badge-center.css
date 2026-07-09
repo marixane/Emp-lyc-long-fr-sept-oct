@@ -2,6 +2,12 @@
   font-size: 22px !important;
 }
 
+@media print {
+  .homework-date {
+    font-size: 28px !important;
+  }
+}
+
 .cahier-extra-holiday-entry .homework-content,
 .cahier-exam-entry .homework-content {
   align-items: stretch !important;
