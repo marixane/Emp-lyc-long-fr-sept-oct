@@ -40,26 +40,23 @@ const setEventVisual = (entry, event) => {
 
 const restoreMawlidAsNormalSaturday = () => {
   const entries = [...document.querySelectorAll('.homework-entry')];
-  const mawlidEntry = entries.find((entry) => /Aïd Al Mawlid|Mawlid Annabaoui/i.test(entryText(entry)));
-  if (!mawlidEntry) return;
-
-  const normalSaturday = entries.find((entry) => {
-    const dateText = entry.querySelector('.homework-date')?.textContent || '';
-    const subjectText = entry.querySelector('.homework-subject')?.textContent || '';
-    const normalText = !/Vacance|Fête nationale|Examen|Rattrapage|Procès-verbal/i.test(entryText(entry));
-    const hasRealSession = /\b\d{2}:\d{2}\b/.test(subjectText) && !/Heure\/Classe/i.test(subjectText);
-    return dateText.startsWith('SAMEDI ') && normalText && hasRealSession;
+  const target = entries.find((entry) => {
+    const date = entryDate(entry);
+    return date === '05/09/2026' || /Aïd Al Mawlid|Mawlid Annabaoui/i.test(entryText(entry));
   });
+  const source = entries.find((entry) => entryDate(entry) === '12/09/2026');
 
-  const dateElement = mawlidEntry.querySelector('.homework-date');
-  const textElement = mawlidEntry.querySelector('.homework-text');
-  const subjectElement = mawlidEntry.querySelector('.homework-subject');
+  if (!target) return;
+
+  const dateElement = target.querySelector('.homework-date');
+  const textElement = target.querySelector('.homework-text');
+  const subjectElement = target.querySelector('.homework-subject');
 
   if (dateElement) dateElement.textContent = 'SAMEDI 05/09/2026';
 
-  if (normalSaturday) {
-    const sourceText = normalSaturday.querySelector('.homework-text');
-    const sourceSubject = normalSaturday.querySelector('.homework-subject');
+  if (source) {
+    const sourceText = source.querySelector('.homework-text');
+    const sourceSubject = source.querySelector('.homework-subject');
 
     if (textElement && sourceText) {
       textElement.innerHTML = sourceText.innerHTML;
@@ -85,7 +82,7 @@ const restoreMawlidAsNormalSaturday = () => {
     if (subjectElement) subjectElement.innerHTML = '';
   }
 
-  mawlidEntry.classList.remove('cahier-extra-holiday-entry', 'cahier-exam-entry');
+  target.classList.remove('cahier-extra-holiday-entry', 'cahier-exam-entry');
 };
 
 const applyOfficialEvents = () => {
