@@ -45,7 +45,10 @@ const restoreMawlidAsNormalSaturday = () => {
 
   const normalSaturday = entries.find((entry) => {
     const dateText = entry.querySelector('.homework-date')?.textContent || '';
-    return dateText.startsWith('SAMEDI ') && !/Vacance|Fête nationale|Examen|Rattrapage|Procès-verbal/i.test(entryText(entry));
+    const subjectText = entry.querySelector('.homework-subject')?.textContent || '';
+    const normalText = !/Vacance|Fête nationale|Examen|Rattrapage|Procès-verbal/i.test(entryText(entry));
+    const hasRealSession = /\b\d{2}:\d{2}\b/.test(subjectText) && !/Heure\/Classe/i.test(subjectText);
+    return dateText.startsWith('SAMEDI ') && normalText && hasRealSession;
   });
 
   const dateElement = mawlidEntry.querySelector('.homework-date');
@@ -57,10 +60,12 @@ const restoreMawlidAsNormalSaturday = () => {
   if (normalSaturday) {
     const sourceText = normalSaturday.querySelector('.homework-text');
     const sourceSubject = normalSaturday.querySelector('.homework-subject');
+
     if (textElement && sourceText) {
       textElement.innerHTML = sourceText.innerHTML;
       textElement.setAttribute('style', sourceText.getAttribute('style') || '');
     }
+
     if (subjectElement && sourceSubject) {
       subjectElement.innerHTML = sourceSubject.innerHTML;
       subjectElement.setAttribute('style', sourceSubject.getAttribute('style') || '');
