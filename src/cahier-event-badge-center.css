@@ -1,10 +1,17 @@
+.cahier-extra-holiday-entry .homework-content,
+.cahier-exam-entry .homework-content {
+  align-items: stretch !important;
+}
+
 .cahier-extra-holiday-entry .homework-subject,
 .cahier-exam-entry .homework-subject {
   display: flex !important;
-  align-items: center !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
   justify-content: center !important;
-  height: 100% !important;
-  min-height: 100% !important;
+  align-self: stretch !important;
+  height: auto !important;
+  min-height: 0 !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
@@ -12,5 +19,6 @@
 .cahier-extra-holiday-entry .homework-subject > div,
 .cahier-exam-entry .homework-subject > div {
   width: 100% !important;
-  margin: 0 !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
 }
