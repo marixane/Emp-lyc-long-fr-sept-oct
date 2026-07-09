@@ -2,7 +2,7 @@ const PDF_BUTTON_ID = 'cahier-pdf-button-stable';
 const A4_WIDTH = '210mm';
 const A4_HEIGHT = '297mm';
 const EXIT_TEXT = 'Signature du Procès-verbal de sortie';
-const EXIT_DATE = 'SAMEDI 10/07';
+const EXIT_DATE = 'SAMEDI 10/07/2027';
 
 const EXPORT_CSS = `
   @page { size: ${A4_WIDTH} ${A4_HEIGHT}; margin: 0; }
@@ -29,13 +29,30 @@ const EXPORT_CSS = `
   }
   .a4-page:last-child, .cahier-page:last-child { break-after: auto !important; page-break-after: auto !important; }
   #${PDF_BUTTON_ID}, .app-tabs, .no-print, button { display: none !important; }
-  .homework-date { font-size: 28px !important; }
+  .homework-date { font-size: 28px !important; border-bottom: 2px dotted rgba(63,64,80,.5) !important; padding-bottom: 8px !important; }
   .homework-subject > div { grid-template-columns: 52px 1fr 34px !important; }
   .cahier-session-duration { display: inline-block !important; visibility: visible !important; opacity: 1 !important; color: rgba(55,65,81,.9) !important; font-size: 10px !important; font-weight: 900 !important; text-align: right !important; white-space: nowrap !important; }
 `;
 
 const clean = (value) => String(value || '').trim().toUpperCase().replace(/\s+/g, ' ');
 const durationText = (span) => `${Math.max(Number(span) || 1, 1)}h`;
+
+const addSchoolYear = (text) => String(text || '').replace(/\b(\d{2})\/(\d{2})(?!\/\d{4})\b/g, (_, day, month) => {
+  const year = Number(month) >= 9 ? 2026 : 2027;
+  return `${day}/${month}/${year}`;
+});
+
+const applyFullYearsForPdf = (zone) => {
+  zone.querySelectorAll('.homework-date').forEach((element) => {
+    element.textContent = addSchoolYear(element.textContent);
+  });
+
+  zone.querySelectorAll('.cahier-exams-list tbody tr').forEach((row) => {
+    Array.from(row.cells).slice(0, 2).forEach((cell) => {
+      cell.textContent = addSchoolYear(cell.textContent);
+    });
+  });
+};
 
 const getCss = () => Array.from(document.styleSheets).map((sheet) => {
   try { return Array.from(sheet.cssRules || []).map((rule) => rule.cssText).join('\n'); }
@@ -208,6 +225,7 @@ const buildExportHtml = () => {
   removeAfterJuly10(zone);
   appendExitPageForEachGroup(zone);
   ensurePdfIncludesJuly10(zone);
+  applyFullYearsForPdf(zone);
 
   return `<style>${getCss()}\n${EXPORT_CSS}</style>${zone.outerHTML}`;
 };
