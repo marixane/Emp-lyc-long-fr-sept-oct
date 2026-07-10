@@ -133,6 +133,7 @@ const fixEntries = (root = document) => {
   document.querySelectorAll('.homework-entry').forEach((entry) => {
     if (isEventEntry(entry)) return;
     const firstDate = getFirstDisplayedDate(entry.querySelector('.homework-date')?.textContent || '');
+    if (firstDate && formatDate(firstDate) === '05/09/2026' && saturdayHasClass) return;
     if (firstDate && eventStartDates.has(formatDate(firstDate))) entry.remove();
   });
 };
