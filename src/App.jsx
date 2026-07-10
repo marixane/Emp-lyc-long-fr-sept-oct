@@ -13,10 +13,16 @@ const removeOldFirstPages = () => {
   });
 };
 
-const moveGroupsBelowTimetable = () => {
+const moveTimetableExtras = () => {
   const timetable = document.querySelector('.timetable-table');
   const timetablePage = timetable?.closest('.a4-page.cahier-page');
   if (!timetable || !timetablePage) return;
+
+  const totalHours = timetablePage.querySelector('.total-hours-control');
+  if (totalHours) {
+    totalHours.classList.add('total-hours-under-timetable');
+    timetable.insertAdjacentElement('afterend', totalHours);
+  }
 
   const groupsContainer = [...document.querySelectorAll('.a4-page.cahier-page div')].find((element) => {
     const children = [...element.children];
@@ -31,12 +37,13 @@ const moveGroupsBelowTimetable = () => {
   if (!groupsContainer) return;
 
   groupsContainer.classList.add('groups-under-timetable');
-  timetable.insertAdjacentElement('afterend', groupsContainer);
+  if (totalHours) totalHours.insertAdjacentElement('afterend', groupsContainer);
+  else timetable.insertAdjacentElement('afterend', groupsContainer);
 };
 
 const refreshLayout = () => {
   removeOldFirstPages();
-  moveGroupsBelowTimetable();
+  moveTimetableExtras();
 };
 
 export default function App() {
@@ -71,6 +78,14 @@ export default function App() {
 
   return <>
     <style>{`
+      .total-hours-under-timetable {
+        position: static !important;
+        transform: none !important;
+        width: fit-content !important;
+        margin: 16px 66px 0 auto !important;
+        z-index: auto !important;
+      }
+
       .groups-under-timetable {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
