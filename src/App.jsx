@@ -18,6 +18,8 @@ const moveTimetableExtras = () => {
   const timetablePage = timetable?.closest('.a4-page.cahier-page');
   if (!timetable || !timetablePage) return;
 
+  timetablePage.classList.add('timetable-page-shifted');
+
   const totalHours = timetablePage.querySelector('.total-hours-control');
   if (totalHours) {
     totalHours.classList.add('total-hours-under-timetable');
@@ -78,6 +80,11 @@ export default function App() {
 
   return <>
     <style>{`
+      .timetable-page-shifted > * {
+        position: relative;
+        top: 30px;
+      }
+
       .total-hours-under-timetable {
         position: static !important;
         transform: none !important;
