@@ -10,11 +10,11 @@ export default function CoverPage() {
 
           <header style={styles.header}>
             <div style={styles.identityBlock}>
-              <div style={styles.emblem}>★</div>
-              <div>
-                <div style={styles.kingdom}>Royaume du Maroc</div>
-                <div style={styles.ministry}>Ministère de l'Éducation Nationale</div>
-              </div>
+              <img
+                src="./ministere-maroc.png"
+                alt="Ministère de l'Éducation Nationale du Royaume du Maroc"
+                style={styles.ministryImage}
+              />
             </div>
 
             <div style={styles.adminBlock}>
@@ -62,22 +62,15 @@ const styles = {
   },
   identityBlock: {
     display: 'flex',
-    gap: '18px',
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
-  emblem: {
-    width: '72px',
-    height: '72px',
-    borderRadius: '18px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#f7c843',
-    fontSize: '42px',
-    background: 'linear-gradient(135deg, #166534, #e11d48)'
+  ministryImage: {
+    display: 'block',
+    width: '285px',
+    maxHeight: '190px',
+    objectFit: 'contain',
+    objectPosition: 'left top'
   },
-  kingdom: { fontSize: '18px', fontWeight: 900, marginBottom: '8px' },
-  ministry: { fontSize: '17px', fontWeight: 800, lineHeight: 1.35 },
   adminBlock: {
     display: 'grid',
     gap: '20px',
