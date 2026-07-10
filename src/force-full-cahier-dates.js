@@ -61,9 +61,11 @@ const restoreMawlidAsNormalSaturday = () => {
   if (!target) return;
 
   if (!hasSaturdayClass()) {
-    target.remove();
+    target.classList.add('cahier-hide-first-saturday');
     return;
   }
+
+  target.classList.remove('cahier-hide-first-saturday');
 
   const dateElement = target.querySelector('.homework-date');
   const textElement = target.querySelector('.homework-text');
