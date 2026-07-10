@@ -1,11 +1,17 @@
-div[style*="min-height: 130px"] {
+.cahier-page div[style*="min-height: 192px"] > div:last-child,
+.cahier-page div[style*="min-height:192px"] > div:last-child,
+.cahier-page div:has(> div[contenteditable]) > div:last-child {
   font-size: 0 !important;
   color: transparent !important;
   line-height: 0 !important;
+  text-indent: -9999px !important;
 }
 
-div[style*="min-height: 130px"] > span {
+.cahier-page div[style*="min-height: 192px"] > div:last-child > span,
+.cahier-page div[style*="min-height:192px"] > div:last-child > span,
+.cahier-page div:has(> div[contenteditable]) > div:last-child > span {
   font-size: 12px !important;
   color: #111827 !important;
   line-height: 1.1 !important;
+  text-indent: 0 !important;
 }
