@@ -13,14 +13,50 @@ const removeOldFirstPages = () => {
   });
 };
 
+const moveGroupsBelowTimetable = () => {
+  const timetable = document.querySelector('.timetable-table');
+  const timetablePage = timetable?.closest('.a4-page.cahier-page');
+  if (!timetable || !timetablePage) return;
+
+  const groupsContainer = [...document.querySelectorAll('.a4-page.cahier-page div')].find((element) => {
+    const children = [...element.children];
+    if (children.length !== 3) return false;
+
+    const titles = children.map((child) => String(child.textContent || '').replace(/\s+/g, ' ').trim().toUpperCase());
+    return titles[0].startsWith('TRONC COMMUN')
+      && titles[1].startsWith('1ÈRES BAC')
+      && titles[2].startsWith('2ÈME BAC');
+  });
+
+  if (!groupsContainer) return;
+
+  groupsContainer.classList.add('groups-under-timetable');
+  timetable.insertAdjacentElement('afterend', groupsContainer);
+};
+
+const refreshLayout = () => {
+  removeOldFirstPages();
+  moveGroupsBelowTimetable();
+};
+
 export default function App() {
   useEffect(() => {
     document.body.classList.add('cahier-tab-active');
     document.body.classList.remove('devoir-tab-active');
 
-    const observer = new MutationObserver(removeOldFirstPages);
+    let scheduled = false;
+    const scheduleRefresh = () => {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        refreshLayout();
+      });
+    };
+
+    const observer = new MutationObserver(scheduleRefresh);
     observer.observe(document.body, { childList: true, subtree: true });
-    removeOldFirstPages();
+    scheduleRefresh();
 
     return () => {
       observer.disconnect();
@@ -30,27 +66,21 @@ export default function App() {
 
   useLayoutEffect(() => {
     scheduleFullDates();
-    removeOldFirstPages();
+    refreshLayout();
   });
 
   return <>
     <style>{`
-      .cahier-preview-zone > .a4-page.cahier-page:not(.cover-page-only):not(.homework-cover-page):not(.homework-page) {
-        display: flex !important;
-        flex-direction: column !important;
+      .groups-under-timetable {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+        width: calc(100% - 132px) !important;
+        margin: 28px auto 0 !important;
       }
 
-      .cahier-page:not(.cahier-exams-groups-page) > div[style*="grid-template-columns: repeat(3, 1fr)"] {
-        order: 1 !important;
-        margin-top: 10px !important;
-      }
-
-      .cahier-page:not(.cahier-exams-groups-page) > .cahier-exams-list {
-        order: 2 !important;
-      }
-
-      .cahier-page:not(.cahier-exams-groups-page) > .cahier-footer {
-        order: 3 !important;
+      .groups-under-timetable > div {
+        min-height: 190px !important;
       }
     `}</style>
     <CoverPage />
