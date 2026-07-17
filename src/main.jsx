@@ -119,6 +119,7 @@ import './cahier-pdf-class-size-fix.js';
 import './cahier-first-saturday-visibility.js';
 import './cahier-pdf-compact-timetable.css';
 import './cahier-pdf-compact-timetable.js';
+import './cahier-preview-page-gap.css';
 
 // Désactivé : ce helper DOM faisait buguer l'ajout de plusieurs séances.
 // import './cahier-group-cover-july10-light.js';

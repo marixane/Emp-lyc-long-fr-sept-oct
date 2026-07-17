@@ -1,0 +1,11 @@
+/* Keep the on-screen cahier pages close together when the A4 preview is scaled. */
+@media screen {
+  body.cahier-tab-active .clean-cahier-shell .cahier-preview-zone {
+    display: grid !important;
+    grid-template-columns: var(--sheet-page-w) !important;
+    grid-auto-rows: var(--sheet-page-h) !important;
+    row-gap: 14px !important;
+    align-items: start !important;
+    justify-items: start !important;
+  }
+}
