@@ -8,7 +8,10 @@ const CELL_COLORS = ['#fff3bf', '#d8f3dc', '#dbeafe', '#ffe4e6', '#ede9fe', '#cf
 const HOMEWORK_COLORS = ['#66c43f', '#b34bd7', '#2f80ed', '#ff3f5f', '#f2994a'];
 const GROUP_COLORS = ['#e0f2fe', '#dcfce7', '#fef3c7'];
 const GROUP_TITLES = ['Tronc Commun', '1ères Bac', '2ème Bac'];
-const DOT_TEXT = Array.from({ length: 3 }, () => '.'.repeat(74)).join('\n');
+const getDotText = (entriesPerPage) => Array.from(
+  { length: entriesPerPage === 2 ? 13 : entriesPerPage === 3 ? 8 : 3 },
+  () => '.'.repeat(74)
+).join('\n');
 const MANDATORY_EVENTS = [
   { start: '05/09', end: '06/09', label: 'Religieuse', text: 'Vacance religieuse : Aïd Al Mawlid Annabaoui', type: 'holiday' },
   { start: '19/10', end: '26/10', label: 'Scolaire', text: 'Vacance scolaire : Vacances intermédiaires 1', type: 'holiday' },
@@ -188,7 +191,7 @@ const getSchoolYear = () => {
 const getSchoolProgressBounds = () => {
   return {
     start: new Date(Date.UTC(2026, 8, 1)),
-    end: new Date(Date.UTC(2027, 8, 10))
+    end: new Date(Date.UTC(2027, 6, 10))
   };
 };
 const getSchoolProgressPercentForDate = (date) => {
@@ -217,7 +220,7 @@ const getSchoolHomeworkDates = () => {
   const startYear = getSchoolStartYear();
   const dates = [];
   const current = new Date(startYear, 8, 1);
-  const end = new Date(startYear + 1, 6, 31);
+  const end = new Date(startYear + 1, 6, 10);
   while (current <= end) {
     dates.push(new Date(current));
     current.setDate(current.getDate() + 1);
@@ -271,6 +274,7 @@ export default function Tab({ onClassGroupsChange }) {
   const [draggedClass, setDraggedClass] = useState(null);
   const [generatedData, setGeneratedData] = useState(null);
   const [classColors, setClassColors] = useState({});
+  const [entriesPerPage, setEntriesPerPage] = useState(5);
   const schoolYear = getSchoolYear();
 
   const validateOnEnter = (event) => {
@@ -336,7 +340,7 @@ export default function Tab({ onClassGroupsChange }) {
   };
 
   const generatePages = () => {
-    setGeneratedData(JSON.parse(JSON.stringify({ rows, hours, classGroups, classColors })));
+    setGeneratedData(JSON.parse(JSON.stringify({ rows, hours, classGroups, classColors, entriesPerPage })));
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => window.dispatchEvent(new Event('cahier-pages-generated')));
     });
@@ -346,6 +350,7 @@ export default function Tab({ onClassGroupsChange }) {
   const generatedHours = generatedData?.hours ?? [];
   const generatedClassGroups = generatedData?.classGroups ?? [];
   const generatedClassColors = generatedData?.classColors ?? {};
+  const generatedEntriesPerPage = generatedData?.entriesPerPage ?? 5;
   const getClassColor = (className) => classColors[className] || getCellColor(className);
   const getGeneratedClassColor = (className) => generatedClassColors[className] || getCellColor(className);
   const updateClassColor = (className, color) => setClassColors((current) => ({ ...current, [className]: color }));
@@ -356,7 +361,16 @@ export default function Tab({ onClassGroupsChange }) {
     return list;
   }, []));
 
-  const groupedHomeworkPages = generatedClassGroups.map((group, groupIndex) => {
+  const generatedClassBooks = generatedClassGroups.flatMap((group, groupIndex) =>
+    group.classes.map((className) => ({
+      title: className,
+      levelTitle: GROUP_TITLES[groupIndex],
+      color: getGeneratedClassColor(className),
+      classes: [className]
+    }))
+  );
+
+  const groupedHomeworkPages = generatedClassBooks.map((group) => {
     const classSet = new Set(group.classes);
     const entries = getSchoolHomeworkDates().flatMap((date) => {
       const dayIndex = getMondayBasedDayIndex(date);
@@ -378,10 +392,10 @@ export default function Tab({ onClassGroupsChange }) {
       if (dayIndex >= generatedRows.length || !classSet.size) return [];
       const sessions = (generatedSessionsByDay[dayIndex] ?? []).filter((session) => classSet.has(session.className));
       if (!sessions.length) return [];
-      return [{ date: `${getDisplayDay(date, generatedRows)} ${monthDate}`, sessions, text: DOT_TEXT, isHoliday: false, isExam: false, progressDate: monthDate, color: HOMEWORK_COLORS[dayIndex % HOMEWORK_COLORS.length] }];
+      return [{ date: `${getDisplayDay(date, generatedRows)} ${monthDate}`, sessions, text: getDotText(generatedEntriesPerPage), isHoliday: false, isExam: false, progressDate: monthDate, color: HOMEWORK_COLORS[dayIndex % HOMEWORK_COLORS.length] }];
     }).filter(Boolean);
 
-    return { title: GROUP_TITLES[groupIndex], color: GROUP_COLORS[groupIndex], classes: group.classes, pages: chunkEntries(entries, 5) };
+    return { ...group, pages: chunkEntries(entries, generatedEntriesPerPage) };
   }).filter((group) => group.classes.length > 0 && group.pages.length > 0);
 
   const findFirstTeachingEntry = (groups, startDay, endDay, month) => groups
@@ -401,8 +415,8 @@ export default function Tab({ onClassGroupsChange }) {
   });
 
   groupedHomeworkPages.forEach((group) => {
-    const isSecondBac = group.title === GROUP_TITLES[2];
-    const isFirstOrCommon = group.title === GROUP_TITLES[0] || group.title === GROUP_TITLES[1];
+    const isSecondBac = group.levelTitle === GROUP_TITLES[2];
+    const isFirstOrCommon = group.levelTitle === GROUP_TITLES[0] || group.levelTitle === GROUP_TITLES[1];
     if (!isSecondBac && !isFirstOrCommon) return;
     const target = findFirstTeachingEntry(
       [group],
@@ -588,12 +602,8 @@ export default function Tab({ onClassGroupsChange }) {
             <EducationIcon kind="cap" color={group.color} />
           </div>
           <h1 className="cahier-group-main-title" style={groupCoverTitleStyle}>{group.title}</h1>
-          <div className="cahier-group-classes-panel" style={groupCoverClassWrapStyle}>
-            <div style={groupCoverClassTitleStyle}>Classes :</div>
-            {group.classes.length ? <div style={groupCoverGridStyle}>{group.classes.map((className) => <span className="cahier-group-cover-class-chip" key={`${group.title}-cover-${className}`} style={{ ...groupCoverChipStyle, background: getGeneratedClassColor(className) }}>{className}</span>)}</div> : <div style={groupCoverEmptyStyle}>Aucune classe affectée</div>}
-          </div>
         </div>,
-        ...group.pages.map((pageEntries, pageIndex) => <div className="a4-page cahier-page homework-page" key={`homework-page-${groupIndex}-${pageIndex}`} style={{ '--group-color': group.color, position: 'relative', paddingTop: '60px' }}>
+        ...group.pages.map((pageEntries, pageIndex) => <div className={`a4-page cahier-page homework-page cahier-lines-per-page-${generatedEntriesPerPage}`} key={`homework-page-${groupIndex}-${pageIndex}`} style={{ '--group-color': group.color, position: 'relative', paddingTop: '60px' }}>
           <div style={groupHomeworkHeaderStyle}>
             <div style={groupHomeworkTitleStyle}>{group.title}</div>
             <div style={progressWrapStyle}>
@@ -635,6 +645,14 @@ export default function Tab({ onClassGroupsChange }) {
       </div>}
       {generatedData && <MoroccoHolidaysPage />}
     </section>
+    <label className="cahier-lines-per-page-control no-print">
+      <span>Lignes par page</span>
+      <select value={entriesPerPage} onChange={(event) => setEntriesPerPage(Number(event.target.value))}>
+        <option value={5}>5 Ligne par page</option>
+        <option value={3}>3 Ligne par page</option>
+        <option value={2}>2 Ligne par page</option>
+      </select>
+    </label>
     <button type="button" className="cahier-generate-pages-button no-print" onClick={generatePages}>Générer les pages</button>
   </main>;
 }

@@ -1,5 +1,16 @@
 body.cahier-tab-active .homework-page {
   --cahier-entry-height: 186px;
+  --cahier-content-height: 124px;
+}
+
+body.cahier-tab-active .homework-page.cahier-lines-per-page-3 {
+  --cahier-entry-height: 310px;
+  --cahier-content-height: 248px;
+}
+
+body.cahier-tab-active .homework-page.cahier-lines-per-page-2 {
+  --cahier-entry-height: 465px;
+  --cahier-content-height: 403px;
 }
 
 body.cahier-tab-active:not(:has(.timetable-table tbody textarea[placeholder="Classe"]:not(:placeholder-shown))) .homework-page {
@@ -34,9 +45,9 @@ body.cahier-tab-active .homework-page .homework-date {
 
 body.cahier-tab-active .homework-page .homework-content {
   box-sizing: border-box !important;
-  height: 124px !important;
-  min-height: 124px !important;
-  max-height: 124px !important;
+  height: var(--cahier-content-height) !important;
+  min-height: var(--cahier-content-height) !important;
+  max-height: var(--cahier-content-height) !important;
   display: grid !important;
   grid-template-columns: 210px 1fr !important;
   overflow: hidden !important;
@@ -45,9 +56,9 @@ body.cahier-tab-active .homework-page .homework-content {
 body.cahier-tab-active .homework-page .homework-subject,
 body.cahier-tab-active .homework-page .homework-text {
   box-sizing: border-box !important;
-  height: 124px !important;
-  min-height: 124px !important;
-  max-height: 124px !important;
+  height: var(--cahier-content-height) !important;
+  min-height: var(--cahier-content-height) !important;
+  max-height: var(--cahier-content-height) !important;
   overflow: hidden !important;
 }
 
@@ -58,9 +69,9 @@ body.cahier-tab-active .homework-page .homework-text {
 }
 
 body.cahier-tab-active .homework-entry:not(.cahier-exam-entry):not(.cahier-extra-holiday-entry) .homework-text {
-  height: 124px !important;
-  min-height: 124px !important;
-  max-height: 124px !important;
+  height: var(--cahier-content-height) !important;
+  min-height: var(--cahier-content-height) !important;
+  max-height: var(--cahier-content-height) !important;
   padding-top: 8px !important;
   padding-bottom: 0 !important;
   font-size: 21px !important;
@@ -81,6 +92,51 @@ body.cahier-tab-active .homework-page .homework-text[style*="pre-wrap"] {
   justify-content: flex-start !important;
 }
 
+/* Zone de préparation moderne : les petits points ronds remplissent toute la
+   hauteur, avec assez d'espace entre deux lignes pour écrire confortablement.
+   Le nombre de lignes s'adapte automatiquement à la hauteur de la case. */
+body.cahier-tab-active
+  .homework-entry:not(.cahier-exam-entry):not(.cahier-extra-holiday-entry)
+  .homework-text {
+  position: relative !important;
+  isolation: isolate !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: transparent !important;
+}
+
+body.cahier-tab-active
+  .homework-entry:not(.cahier-exam-entry):not(.cahier-extra-holiday-entry)
+  .homework-text::after {
+  content: '';
+  position: absolute;
+  inset: 0 20px;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #aeb2bb 1.15px, transparent 1.35px);
+  background-position: 0 8px;
+  background-size: 7px 28px;
+  background-repeat: repeat;
+}
+
+body.cahier-tab-active
+  .homework-entry:not(.cahier-exam-entry):not(.cahier-extra-holiday-entry)
+  .homework-text::before {
+  content: 'Contenu de la leçon :';
+  position: absolute;
+  top: 13px;
+  left: 18px;
+  z-index: 1;
+  padding: 0 9px 0 14px;
+  background: #fff;
+  color: #aeb2bb;
+  -webkit-text-fill-color: #aeb2bb;
+  font: 800 14px/18px Arial, sans-serif;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 body.cahier-tab-active .homework-page .homework-subject > div {
   max-height: 32px !important;
 }
@@ -88,5 +144,16 @@ body.cahier-tab-active .homework-page .homework-subject > div {
 @media print {
   body.cahier-tab-active .homework-page {
     --cahier-entry-height: 186px;
+    --cahier-content-height: 124px;
+  }
+
+  body.cahier-tab-active .homework-page.cahier-lines-per-page-3 {
+    --cahier-entry-height: 310px;
+    --cahier-content-height: 248px;
+  }
+
+  body.cahier-tab-active .homework-page.cahier-lines-per-page-2 {
+    --cahier-entry-height: 465px;
+    --cahier-content-height: 403px;
   }
 }
