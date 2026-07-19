@@ -664,13 +664,17 @@ export default function Tab({ onClassGroupsChange }) {
       </div>}
       {generatedData && <MoroccoHolidaysPage />}
     </section>
-    <label className="cahier-lines-per-page-control no-print">
-      <span>Lignes par page</span>
-      <select value={entriesPerPage} onChange={(event) => setEntriesPerPage(Number(event.target.value))}>
-        <option value={5}>5 Ligne par page</option>
-        <option value={3}>3 Ligne par page</option>
-        <option value={2}>2 Ligne par page</option>
-      </select>
-    </label>
+    <div className="cahier-lines-per-page-control no-print">
+      <button
+        type="button"
+        className="cahier-layout-cycle-button"
+        onClick={() => setEntriesPerPage(entriesPerPage === 5 ? 3 : entriesPerPage === 3 ? 2 : 5)}
+        aria-label={`Disposition actuelle : ${entriesPerPage} jours par page A4. Cliquer pour changer.`}
+        title="Cliquer pour passer à la disposition suivante"
+      >
+        <span className="cahier-layout-cycle-title">Disposition</span>
+        <span className="cahier-layout-cycle-value">▼ {entriesPerPage} jours / page A4</span>
+      </button>
+    </div>
   </main>;
 }
