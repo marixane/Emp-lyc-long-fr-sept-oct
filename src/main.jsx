@@ -142,4 +142,7 @@ import './cahier-preview-page-gap.css';
 // import './cahier-hide-empty-group-pages.js';
 // import './cahier-july-complete.js';
 
+import './cahier-timetable-service.css';
+import './cahier-timetable-service.js';
+
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
