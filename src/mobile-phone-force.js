@@ -236,6 +236,10 @@ function applyMobilePhoneForce() {
         translate: 0 0 !important;
       }
 
+      body .clean-cahier-shell .cahier-preview-zone {
+        overflow: visible !important;
+      }
+
       body .preview-zone .a4-page::before,
       body .a4-page::before {
         content: '' !important;
